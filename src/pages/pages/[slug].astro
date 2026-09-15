@@ -35,19 +35,29 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 
 <style>
 	.page-article {
-		max-width: var(--max-width);
+		max-width: var(--slim-width);
 		margin: 0 auto;
-		padding: var(--spacing-16) var(--spacing-6) var(--spacing-16);
+		padding: var(--section-y) var(--page-gutter) var(--spacing-20);
 	}
 
 	.page-header {
-		margin-bottom: var(--spacing-8);
+		margin-bottom: var(--spacing-12);
+		padding-bottom: var(--spacing-8);
+		border-bottom: 2px solid var(--color-border);
 	}
 
 	.page-title {
-		font-size: clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl));
+		font-size: var(--font-size-display);
 		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
 		line-height: var(--leading-tight);
+		max-width: 20ch;
+	}
+
+	.page-content {
+		font-size: var(--font-size-lg);
+		line-height: var(--leading-relaxed);
+		color: var(--color-text);
 	}
 
 	.page-content :global(p) {
@@ -55,39 +65,46 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 	}
 
 	.page-content :global(h2) {
-		font-size: var(--font-size-2xl);
+		font-size: var(--font-size-section);
 		margin-top: 2em;
 		margin-bottom: 0.75em;
+		line-height: var(--leading-snug);
+		scroll-margin-top: calc(var(--nav-height) + var(--spacing-4));
 	}
 
 	.page-content :global(h3) {
 		font-size: var(--font-size-xl);
 		margin-top: 1.75em;
 		margin-bottom: 0.5em;
+		scroll-margin-top: calc(var(--nav-height) + var(--spacing-4));
 	}
 
 	.page-content :global(blockquote) {
-		margin: 1.5em 0;
-		padding-left: var(--spacing-6);
-		border-left: 3px solid var(--color-border);
-		color: var(--color-muted);
+		margin: 2em 0;
+		padding: var(--spacing-2) var(--spacing-5);
+		border-left: 2px solid var(--color-brand);
+		background: none;
+		color: var(--color-text-secondary);
+		font-style: italic;
 	}
 
 	.page-content :global(pre) {
 		margin: 1.5em 0;
-		padding: var(--spacing-4);
+		padding: var(--spacing-5);
 		background: var(--color-surface);
+		border: 1px solid var(--color-border);
 		border-radius: var(--radius);
 		overflow-x: auto;
 		font-family: var(--font-mono);
 		font-size: var(--font-size-sm);
+		line-height: 1.6;
 	}
 
 	.page-content :global(code) {
 		font-family: var(--font-mono);
 		font-size: 0.9em;
 		background: var(--color-surface);
-		padding: 0.15em 0.3em;
+		padding: 0.2em 0.4em;
 		border-radius: var(--radius);
 	}
 
@@ -99,10 +116,33 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 	.page-content :global(ul),
 	.page-content :global(ol) {
 		margin-bottom: 1.5em;
-		padding-left: var(--spacing-5);
+		padding-left: 1.5em;
 	}
 
 	.page-content :global(li) {
 		margin-bottom: 0.5em;
+	}
+
+	.page-content :global(img) {
+		margin: 2em 0;
+		border: 1px solid var(--color-border-subtle);
+		border-radius: var(--radius);
+	}
+
+	.page-content :global(hr) {
+		margin: 3em 0;
+		border: none;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.page-content :global(a) {
+		color: var(--color-brand);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		text-decoration-thickness: 1px;
+	}
+
+	.page-content :global(a:hover) {
+		text-decoration-thickness: 2px;
 	}
 </style>
