@@ -1,0 +1,60 @@
+/*
+  theme.css -- 99Ways design foundation overrides.
+
+  Every design token lives in src/styles/tokens.css. Override them here:
+  declarations in this file are unlayered, so they always beat the
+  @layer base defaults in tokens.css.
+
+  Design direction (from the repository's 99Ways brand assets v1.0,
+  reference/palette.md and reference/logo-specification.md):
+    - Graphite #292B2A      -- primary neutral (body text, logo ink)
+    - Warm White #F4F3EF    -- light background field / dark-mode ink
+    - Inquiry blue #3558B8  -- brand accent (logo pupils, links)
+    - Muted #676B65         -- supporting/secondary text
+    - Performance green #147D40 -- action / favorable outcome
+    - Inverse roles #A6BAFF / #B5B8B1 / #6BD98D -- dark-field adaptations
+
+  Typography: IBM Plex Mono (the brand's single supplied typeface) carries
+  the display/heading face and the mono/meta face; Inter carries body text.
+*/
+
+:root {
+	/* Logo inks */
+	--color-logo: light-dark(#292b2a, #f4f3ef);
+	--color-logo-pupil: light-dark(#3558b8, #a6baff);
+
+	/* Brand palette */
+	--color-bg: light-dark(#f4f3ef, #292b2a);
+	--color-bg-subtle: light-dark(#ecebe6, #333532);
+	--color-surface: light-dark(#e6e5df, #3a3d39);
+	--color-text: light-dark(#292b2a, #f4f3ef);
+	--color-text-secondary: light-dark(#4a4d47, #b5b8b1);
+	--color-muted: light-dark(#676b65, #8f938c);
+	--color-border: light-dark(#d8d7d0, #4a4d47);
+	--color-border-subtle: light-dark(#e6e5df, #3a3d39);
+
+	--color-brand: light-dark(#3558b8, #a6baff);
+	--color-brand-hover: light-dark(#2a4699, #c3d1ff);
+	--color-on-brand: #f4f3ef;
+	--color-brand-ring: color-mix(in srgb, var(--color-brand) 25%, transparent);
+
+	/* Performance green (action / favorable outcome) */
+	--color-success: light-dark(#147d40, #6bd98d);
+
+	/* EmDash search theming */
+	--emdash-search-bg: var(--color-bg);
+	--emdash-search-text: var(--color-text);
+	--emdash-search-muted: var(--color-muted);
+	--emdash-search-border: var(--color-border);
+	--emdash-search-hover: var(--color-surface);
+	--emdash-search-highlight: var(--color-text);
+
+	/* Typography: IBM Plex Mono carries display headings and meta */
+	--font-heading: var(--font-display);
+	--font-weight-heading: 600;
+	--font-weight-display: 600;
+
+	/* Slightly tighter radius for a sharper, architectural feel */
+	--radius: 4px;
+	--radius-lg: 8px;
+}
