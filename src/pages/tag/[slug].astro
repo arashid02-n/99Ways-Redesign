@@ -76,41 +76,47 @@ const filteredPosts = posts.map((post) => ({
 	.archive-section {
 		max-width: var(--wide-width);
 		margin: 0 auto;
-		padding: var(--spacing-12) var(--spacing-6);
+		padding: var(--section-y) var(--page-gutter) var(--spacing-20);
 	}
 
 	.archive-header {
 		margin-bottom: var(--spacing-12);
 		padding-bottom: var(--spacing-8);
-		border-bottom: 1px solid var(--color-border-subtle);
+		border-bottom: 2px solid var(--color-border);
 	}
 
 	.archive-label {
-		display: block;
-		font-size: var(--font-size-xs);
-		font-weight: 500;
-		color: var(--color-brand);
+		font-family: var(--font-mono);
+		font-size: var(--font-size-kicker);
+		font-weight: 600;
+		letter-spacing: var(--tracking-eyebrow);
 		text-transform: uppercase;
-		letter-spacing: var(--tracking-wider);
-		margin-bottom: var(--spacing-2);
+		color: var(--color-brand);
 	}
 
 	.archive-title {
-		font-size: var(--font-size-4xl);
+		font-size: var(--font-size-display);
 		font-weight: var(--font-weight-display);
 		letter-spacing: var(--tracking-tight);
-		margin-bottom: var(--spacing-2);
+		line-height: var(--leading-tight);
+		margin-top: var(--spacing-3);
+		margin-bottom: var(--spacing-4);
+		max-width: 18ch;
 	}
 
 	.archive-count {
-		font-size: var(--font-size-sm);
+		font-family: var(--font-mono);
+		font-size: var(--font-size-kicker);
+		font-weight: 600;
+		letter-spacing: var(--tracking-eyebrow);
+		text-transform: uppercase;
 		color: var(--color-muted);
 	}
 
 	.posts-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-12) var(--spacing-8);
+		gap: var(--spacing-10) var(--spacing-8);
 	}
 
 	.no-posts {
