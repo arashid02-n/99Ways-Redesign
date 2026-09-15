@@ -1,21 +1,23 @@
 /*
   theme.css -- 99Ways design foundation overrides.
 
-  Every design token lives in src/styles/tokens.css. Override them here:
-  declarations in this file are unlayered, so they always beat the
-  @layer base defaults in tokens.css.
+  Design tokens start in src/styles/tokens.css (the template defaults).
+  Override and extend them here: declarations in this file are
+  unlayered, so they always beat the @layer base defaults.
 
   Design direction (from the repository's 99Ways brand assets v1.0,
   reference/palette.md and reference/logo-specification.md):
     - Graphite #292B2A      -- primary neutral (body text, logo ink)
     - Warm White #F4F3EF    -- light background field / dark-mode ink
-    - Inquiry blue #3558B8  -- brand accent (logo pupils, links)
+    - Inquiry blue #3558B8  -- brand accent (logo pupils, links, CTAs)
     - Muted #676B65         -- supporting/secondary text
     - Performance green #147D40 -- action / favorable outcome
     - Inverse roles #A6BAFF / #B5B8B1 / #6BD98D -- dark-field adaptations
 
-  Typography: IBM Plex Mono (the brand's single supplied typeface) carries
-  the display/heading face and the mono/meta face; Inter carries body text.
+  Typography: IBM Plex Mono (the brand's supplied typeface) carries the
+  display/heading face and the mono/meta face; Inter carries body text.
+  The system is deliberately data-strict: mono eyebrows and section
+  numbers, hairline rules, quiet surfaces, and color used as signal.
 */
 
 :root {
@@ -40,6 +42,7 @@
 
 	/* Performance green (action / favorable outcome) */
 	--color-success: light-dark(#147d40, #6bd98d);
+	--color-success-soft: light-dark(#e7f2ea, #1a3a28);
 
 	/* EmDash search theming */
 	--emdash-search-bg: var(--color-bg);
@@ -54,7 +57,118 @@
 	--font-weight-heading: 600;
 	--font-weight-display: 600;
 
+	/* Display-first fluid type scale */
+	--font-size-hero: clamp(2.5rem, 1.25rem + 4vw, 4.5rem);
+	--font-size-display: clamp(1.875rem, 1rem + 2.4vw, 3.25rem);
+	--font-size-section: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+	--font-size-kicker: 0.75rem;
+
+	/* Mono label tracking */
+	--tracking-eyebrow: 0.16em;
+
+	/* Layout */
+	--page-gutter: clamp(1.25rem, 1rem + 2vw, 2.5rem);
+	--section-y: clamp(4.5rem, 2rem + 9vw, 8.5rem);
+	--slim-width: 960px;
+
+	/* Buttons */
+	--btn-font-size: 0.8125rem;
+	--btn-pad-x: 1.375rem;
+	--btn-pad-y: 0.8125rem;
+	--btn-radius: var(--radius);
+
 	/* Slightly tighter radius for a sharper, architectural feel */
 	--radius: 4px;
 	--radius-lg: 8px;
+
+	/* Focus */
+	--focus-ring: 0 0 0 3px var(--color-brand-ring);
+}
+
+/*
+ * Primitive classes used across sections: mono eyebrows with optional
+ * section numbers, and the primary/ghost button system. They are
+ * unlayered like the rest of this file so they win over @layer base.
+ */
+.eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.625rem;
+	font-family: var(--font-mono);
+	font-size: var(--font-size-kicker);
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: var(--tracking-eyebrow);
+	text-transform: uppercase;
+	color: var(--color-muted);
+}
+
+.eyebrow::before {
+	content: "";
+	width: 1.5rem;
+	height: 1px;
+	background: var(--color-brand);
+}
+
+.eyebrow--plain::before {
+	display: none;
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	height: 2.75rem;
+	padding: 0 var(--btn-pad-x);
+	font-family: var(--font-mono);
+	font-size: var(--btn-font-size);
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: 0.02em;
+	text-decoration: none;
+	border-radius: var(--btn-radius);
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition:
+		background var(--transition-base),
+		border-color var(--transition-base),
+		color var(--transition-base);
+}
+
+.btn:focus-visible {
+	outline: none;
+	box-shadow: var(--focus-ring);
+}
+
+.btn--primary {
+	background: var(--color-brand);
+	color: var(--color-on-brand);
+}
+
+.btn--primary:hover {
+	background: var(--color-brand-hover);
+	color: var(--color-on-brand);
+}
+
+.btn--ghost {
+	border-color: var(--color-text);
+	color: var(--color-text);
+	background: transparent;
+}
+
+.btn--ghost:hover {
+	background: var(--color-text);
+	color: var(--color-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		scroll-behavior: auto !important;
+	}
 }
