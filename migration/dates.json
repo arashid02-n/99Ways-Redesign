@@ -1,0 +1,437 @@
+[
+  {
+    "collection": "posts",
+    "slug": "confidence-vs-posthog",
+    "publishedAt": "2026-09-09T15:25:55"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-implementation",
+    "publishedAt": "2026-08-26T16:37:00"
+  },
+  {
+    "collection": "posts",
+    "slug": "ab-testing-metrics",
+    "publishedAt": "2026-08-25T15:22:00"
+  },
+  {
+    "collection": "posts",
+    "slug": "cro-redesign-vs-ab-testing",
+    "publishedAt": "2026-08-24T16:32:34"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-evaluate-a-cro-agency",
+    "publishedAt": "2026-08-21T11:02:45"
+  },
+  {
+    "collection": "posts",
+    "slug": "event-tracking-plan",
+    "publishedAt": "2026-08-19T10:41:43"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-audit",
+    "publishedAt": "2026-08-19T10:17:51"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-vs-ga4",
+    "publishedAt": "2026-08-19T09:04:45"
+  },
+  {
+    "collection": "posts",
+    "slug": "experimentation-system-audit",
+    "publishedAt": "2026-08-14T18:44:06"
+  },
+  {
+    "collection": "posts",
+    "slug": "conversion-tracking-audit",
+    "publishedAt": "2026-08-11T19:05:27"
+  },
+  {
+    "collection": "posts",
+    "slug": "growth-lever-analytics",
+    "publishedAt": "2026-08-09T15:22:33"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-much-does-an-a-b-test-really-cost",
+    "publishedAt": "2026-07-28T19:22:39"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-measure-the-cumulative-impact-of-conversion-rate-optimization",
+    "publishedAt": "2026-07-24T10:08:46"
+  },
+  {
+    "collection": "posts",
+    "slug": "reading-loaded-posthog-feature-flags-without-exposure-events",
+    "publishedAt": "2026-07-16T13:51:40"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-use-the-posthog-skills-store-to-share-agent-workflows-across-your-team",
+    "publishedAt": "2026-06-19T19:08:40"
+  },
+  {
+    "collection": "posts",
+    "slug": "per-pipeline-notification-settings-for-posthog-data-pipeline-errors",
+    "publishedAt": "2026-06-05T18:35:32"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-custom-axis-labels-in-posthog-trends-charts-improve-reporting-clarity",
+    "publishedAt": "2026-06-05T15:12:33"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-snapchat-ads-integration-conversion-event-tracking",
+    "publishedAt": "2026-06-04T14:47:22"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-set-a-default-minimum-detectable-effect-in-posthog-experiments",
+    "publishedAt": "2026-05-22T18:57:30"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-send-posthog-conversion-events-to-pinterest",
+    "publishedAt": "2026-05-19T15:45:34"
+  },
+  {
+    "collection": "posts",
+    "slug": "the-complete-hyros-tracking-maintenance-checklist",
+    "publishedAt": "2026-05-08T19:04:27"
+  },
+  {
+    "collection": "posts",
+    "slug": "what-url-parameters-should-you-set-for-your-ads",
+    "publishedAt": "2026-04-23T19:00:34"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-i-finally-started-using-posthog-session-replay-the-right-way",
+    "publishedAt": "2026-04-13T18:52:05"
+  },
+  {
+    "collection": "posts",
+    "slug": "identify-who-dropped-off-in-posthog-session-based-funnels",
+    "publishedAt": "2026-04-08T18:43:51"
+  },
+  {
+    "collection": "posts",
+    "slug": "monitor-new-errors-faster-with-posthog-error-tracking-alerts",
+    "publishedAt": "2026-04-06T18:41:56"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-send-posthog-conversion-events-to-tiktok-ads",
+    "publishedAt": "2026-03-27T17:50:51"
+  },
+  {
+    "collection": "posts",
+    "slug": "metric-breakdowns-in-posthog-test-results",
+    "publishedAt": "2026-03-18T17:55:12"
+  },
+  {
+    "collection": "posts",
+    "slug": "replay-summaries-are-now-available-in-posthog-experiments",
+    "publishedAt": "2026-03-18T15:02:57"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-send-posthog-conversion-events-to-reddit-ads",
+    "publishedAt": "2026-03-16T17:56:06"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-experiments-can-now-launch-without-metrics",
+    "publishedAt": "2026-03-12T17:09:20"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-send-posthog-conversion-events-to-google-ads",
+    "publishedAt": "2026-02-27T18:14:48"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-sql-variable-management",
+    "publishedAt": "2026-02-26T14:45:53"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-send-posthog-conversion-events-to-meta-ads",
+    "publishedAt": "2026-02-18T14:17:40"
+  },
+  {
+    "collection": "posts",
+    "slug": "combine-events-in-posthog-trends",
+    "publishedAt": "2026-02-06T17:13:46"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-vs-twilio-segment-product-analytics-or-cdp",
+    "publishedAt": "2025-12-18T19:32:56"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-save-ip-address-to-person-properties-in-posthog",
+    "publishedAt": "2025-12-12T12:10:58"
+  },
+  {
+    "collection": "posts",
+    "slug": "hire-hyros-expert-guide",
+    "publishedAt": "2025-11-19T15:04:19"
+  },
+  {
+    "collection": "posts",
+    "slug": "hire-posthog-expert-guide",
+    "publishedAt": "2025-11-12T17:48:53"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-build-consistent-utms-for-reliable-marketing-attribution",
+    "publishedAt": "2025-11-04T19:05:02"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-convert-currencies-in-posthog-and-track-revenue",
+    "publishedAt": "2025-10-07T18:11:01"
+  },
+  {
+    "collection": "posts",
+    "slug": "best-ways-to-install-posthog-on-wordpress-in-2025",
+    "publishedAt": "2025-09-08T14:08:28"
+  },
+  {
+    "collection": "posts",
+    "slug": "shopify-posthog-integration-methods",
+    "publishedAt": "2025-09-03T16:35:25"
+  },
+  {
+    "collection": "posts",
+    "slug": "pre-lander-opt-in-form-a-b-test-which-form-converts-better",
+    "publishedAt": "2025-08-28T15:09:27"
+  },
+  {
+    "collection": "posts",
+    "slug": "application-form-a-b-test-multiple-choice-vs-descriptive-question",
+    "publishedAt": "2025-08-19T14:26:27"
+  },
+  {
+    "collection": "posts",
+    "slug": "webinar-wait-room-a-b-test-what-really-impacts-conversions",
+    "publishedAt": "2025-08-12T17:33:07"
+  },
+  {
+    "collection": "posts",
+    "slug": "application-form-a-b-test-removing-the-urgency-question",
+    "publishedAt": "2025-08-05T17:53:38"
+  },
+  {
+    "collection": "posts",
+    "slug": "relatability-a-b-test-the-power-of-being-understood",
+    "publishedAt": "2025-07-30T15:48:12"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-vs-hyros-the-better-fit-for-your-business",
+    "publishedAt": "2025-07-22T13:24:11"
+  },
+  {
+    "collection": "posts",
+    "slug": "combined-form-a-b-test-can-fewer-steps-boost-conversion",
+    "publishedAt": "2025-07-16T13:53:42"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-reduce-your-posthog-costs",
+    "publishedAt": "2025-07-04T14:08:31"
+  },
+  {
+    "collection": "posts",
+    "slug": "free-trial-vs-no-trial-what-really-drives-retention",
+    "publishedAt": "2025-06-27T14:49:18"
+  },
+  {
+    "collection": "posts",
+    "slug": "testimonial-placement-a-b-test-is-first-impression-everything",
+    "publishedAt": "2025-06-26T15:10:05"
+  },
+  {
+    "collection": "posts",
+    "slug": "social-proof-a-b-test-does-live-beat-static",
+    "publishedAt": "2025-06-24T16:33:52"
+  },
+  {
+    "collection": "posts",
+    "slug": "video-length-a-b-test-does-shorter-mean-stronger",
+    "publishedAt": "2025-06-23T17:41:07"
+  },
+  {
+    "collection": "posts",
+    "slug": "headline-battle-which-message-turns-viewers-into-buyers",
+    "publishedAt": "2025-06-17T14:33:36"
+  },
+  {
+    "collection": "posts",
+    "slug": "video-control-a-b-test-does-no-skipping-mean-more-clicking",
+    "publishedAt": "2025-06-16T15:13:24"
+  },
+  {
+    "collection": "posts",
+    "slug": "radio-buttons-vs-multiple-ctas-what-improved-conversions",
+    "publishedAt": "2025-06-16T12:12:01"
+  },
+  {
+    "collection": "posts",
+    "slug": "headline-a-b-test-simplicity-sells-better-than-you-think",
+    "publishedAt": "2025-06-11T16:04:44"
+  },
+  {
+    "collection": "posts",
+    "slug": "join-rate-a-b-test-can-timing-boost-signups",
+    "publishedAt": "2025-06-09T17:58:04"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-we-installed-posthog-on-clickfunnels",
+    "publishedAt": "2025-06-06T17:11:12"
+  },
+  {
+    "collection": "posts",
+    "slug": "timestamp-a-b-test-does-time-help-or-hurt",
+    "publishedAt": "2025-06-02T18:20:03"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-setup-posthog-a-b-test-on-clickfunnels",
+    "publishedAt": "2025-05-30T18:16:41"
+  },
+  {
+    "collection": "posts",
+    "slug": "testimonial-a-b-test-does-social-proof-really-boost-conversions",
+    "publishedAt": "2025-05-27T16:48:50"
+  },
+  {
+    "collection": "posts",
+    "slug": "cta-button-a-b-test-animation-vs-no-animation",
+    "publishedAt": "2025-05-26T15:37:04"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-internal-user-filtering",
+    "publishedAt": "2025-05-23T14:51:02"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-slack-integration-send-event-alerts-to-slack",
+    "publishedAt": "2025-05-22T18:03:15"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-set-up-a-posthog-alert-for-your-website",
+    "publishedAt": "2025-05-21T17:23:42"
+  },
+  {
+    "collection": "posts",
+    "slug": "posthog-experiment-naming-guidelines",
+    "publishedAt": "2025-05-15T16:21:25"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-setup-posthog-a-b-test-on-shopify",
+    "publishedAt": "2025-05-12T17:35:21"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-to-setup-posthog-a-b-test-on-wordpress",
+    "publishedAt": "2025-05-07T18:02:04"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-we-installed-posthog-on-shopify-and-captured-all-events",
+    "publishedAt": "2024-09-17T16:40:02"
+  },
+  {
+    "collection": "posts",
+    "slug": "create-your-posthog-account",
+    "publishedAt": "2024-09-13T14:47:03"
+  },
+  {
+    "collection": "posts",
+    "slug": "how-we-installed-posthog-on-wordpress",
+    "publishedAt": "2024-09-09T23:14:00"
+  },
+  {
+    "collection": "pages",
+    "slug": "my-account",
+    "publishedAt": "2026-08-11T02:29:39"
+  },
+  {
+    "collection": "pages",
+    "slug": "register",
+    "publishedAt": "2026-08-11T02:29:36"
+  },
+  {
+    "collection": "pages",
+    "slug": "subscribe",
+    "publishedAt": "2026-08-11T02:29:33"
+  },
+  {
+    "collection": "pages",
+    "slug": "login",
+    "publishedAt": "2026-08-11T02:29:30"
+  },
+  {
+    "collection": "pages",
+    "slug": "official-references-profiles",
+    "publishedAt": "2026-06-09T17:08:59"
+  },
+  {
+    "collection": "pages",
+    "slug": "home",
+    "publishedAt": "2026-04-23T11:20:52"
+  },
+  {
+    "collection": "pages",
+    "slug": "thank-you",
+    "publishedAt": "2026-04-02T15:42:26"
+  },
+  {
+    "collection": "pages",
+    "slug": "hire-cro-expert",
+    "publishedAt": "2026-03-31T15:24:25"
+  },
+  {
+    "collection": "pages",
+    "slug": "terms-of-use",
+    "publishedAt": "2025-11-18T13:37:32"
+  },
+  {
+    "collection": "pages",
+    "slug": "contact-form",
+    "publishedAt": "2025-11-13T17:59:07"
+  },
+  {
+    "collection": "pages",
+    "slug": "book-your-free-consultation",
+    "publishedAt": "2025-10-29T14:43:16"
+  },
+  {
+    "collection": "pages",
+    "slug": "experiment-test-page",
+    "publishedAt": "2025-05-19T18:06:19"
+  },
+  {
+    "collection": "pages",
+    "slug": "academy",
+    "publishedAt": "2024-09-12T00:13:13"
+  },
+  {
+    "collection": "pages",
+    "slug": "privacy-policy",
+    "publishedAt": "2024-09-02T17:45:48"
+  }
+]
