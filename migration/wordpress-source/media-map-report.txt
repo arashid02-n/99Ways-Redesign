@@ -1,0 +1,20 @@
+{
+  "total_wp_media": 455,
+  "migrated": 453,
+  "skipped_svg": 2,
+  "errors": [],
+  "skipped": [
+    {
+      "id": "7190",
+      "slug": "gemini-svg",
+      "mime": "image/svg+xml",
+      "source_url": "https://99ways.instawp.dev/wp-content/uploads/2026/08/gemini-svg.svg"
+    },
+    {
+      "id": "6995",
+      "slug": "growth-lever-analytics-99ways",
+      "mime": "image/svg+xml",
+      "source_url": "https://99ways.instawp.dev/wp-content/uploads/2026/08/Growth-Lever-Analytics-99Ways.svg"
+    }
+  ]
+}
