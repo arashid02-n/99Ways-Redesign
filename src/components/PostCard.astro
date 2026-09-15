@@ -121,9 +121,11 @@ const formattedDate = date
 	.card-image {
 		aspect-ratio: 16 / 10;
 		overflow: hidden;
-		border-radius: var(--radius-lg);
+		border: 1px solid var(--color-border-subtle);
+		border-radius: var(--radius);
 		background: var(--color-surface);
 		margin-bottom: var(--spacing-4);
+		transition: border-color var(--transition-fast);
 	}
 
 	.card-image img {
@@ -133,13 +135,18 @@ const formattedDate = date
 		transition: transform 0.3s ease;
 	}
 
+	.card-link:hover .card-image {
+		border-color: var(--color-border);
+	}
+
 	.card-link:hover .card-image img {
 		transform: scale(1.03);
 	}
 
 	.card-placeholder {
 		aspect-ratio: 16 / 10;
-		border-radius: var(--radius-lg);
+		border: 1px solid var(--color-border-subtle);
+		border-radius: var(--radius);
 		background: var(--color-surface);
 		margin-bottom: var(--spacing-4);
 	}
@@ -152,9 +159,13 @@ const formattedDate = date
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
-		column-gap: var(--spacing-3);
+		column-gap: var(--spacing-2);
 		row-gap: 0;
-		font-size: var(--font-size-sm);
+		font-family: var(--font-mono);
+		font-size: var(--font-size-kicker);
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
 		color: var(--color-muted);
 		margin-bottom: var(--spacing-2);
 	}
@@ -203,20 +214,24 @@ const formattedDate = date
 
 	.card-tag {
 		display: inline-block;
-		padding: var(--tag-padding-y) var(--spacing-2);
-		font-size: var(--font-size-xs);
-		color: var(--color-text-secondary);
-		background: var(--color-surface);
+		padding: var(--spacing-1) var(--spacing-2);
+		font-family: var(--font-mono);
+		font-size: var(--font-size-kicker);
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+		border: 1px solid var(--color-border-subtle);
 		border-radius: var(--radius);
 		text-decoration: none;
 		transition:
 			color var(--transition-fast),
-			background var(--transition-fast);
+			border-color var(--transition-fast);
 	}
 
 	.card-tag:hover {
 		color: var(--color-text);
-		background: var(--color-border);
+		border-color: var(--color-text);
 	}
 
 	/* Byline styles */
