@@ -4,8 +4,9 @@ import { getEmDashCollection, getSiteSettings } from "emdash";
 import { resolveBlogSiteIdentity } from "../utils/site-identity";
 
 export const GET: APIRoute = async ({ site, url }) => {
-	const siteUrl = site?.toString() || url.origin;
-	const { siteTitle, siteTagline } = resolveBlogSiteIdentity(await getSiteSettings());
+	const settings = await getSiteSettings();
+	const siteUrl = settings.url || site?.toString() || url.origin;
+	const { siteTitle, siteTagline } = resolveBlogSiteIdentity(settings);
 
 	const { entries: posts } = await getEmDashCollection("posts", {
 		orderBy: { published_at: "desc" },
