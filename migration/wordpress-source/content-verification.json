@@ -1,0 +1,528 @@
+{
+  "posts": [
+    {
+      "slug": "confidence-vs-posthog",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "posthog-implementation",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "ab-testing-metrics",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "cro-redesign-vs-ab-testing",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "how-to-evaluate-a-cro-agency",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "event-tracking-plan",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "posthog-audit",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "posthog-vs-ga4",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "experimentation-system-audit",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "conversion-tracking-audit",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "growth-lever-analytics",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "how-much-does-an-a-b-test-really-cost",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "how-to-measure-the-cumulative-impact-of-conversion-rate-optimization",
+      "ok": true,
+      "similarity": 0.998,
+      "issues": []
+    },
+    {
+      "slug": "reading-loaded-posthog-feature-flags-without-exposure-events",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-to-use-the-posthog-skills-store-to-share-agent-workflows-across-your-team",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "per-pipeline-notification-settings-for-posthog-data-pipeline-errors",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-custom-axis-labels-in-posthog-trends-charts-improve-reporting-clarity",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "posthog-snapchat-ads-integration-conversion-event-tracking",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "how-to-set-a-default-minimum-detectable-effect-in-posthog-experiments",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-to-send-posthog-conversion-events-to-pinterest",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "the-complete-hyros-tracking-maintenance-checklist",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "what-url-parameters-should-you-set-for-your-ads",
+      "ok": true,
+      "similarity": 0.997,
+      "issues": []
+    },
+    {
+      "slug": "how-i-finally-started-using-posthog-session-replay-the-right-way",
+      "ok": true,
+      "similarity": 0.998,
+      "issues": []
+    },
+    {
+      "slug": "identify-who-dropped-off-in-posthog-session-based-funnels",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "monitor-new-errors-faster-with-posthog-error-tracking-alerts",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-to-send-posthog-conversion-events-to-tiktok-ads",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "metric-breakdowns-in-posthog-test-results",
+      "ok": true,
+      "similarity": 0.997,
+      "issues": []
+    },
+    {
+      "slug": "replay-summaries-are-now-available-in-posthog-experiments",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-to-send-posthog-conversion-events-to-reddit-ads",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "posthog-experiments-can-now-launch-without-metrics",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-to-send-posthog-conversion-events-to-google-ads",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "posthog-sql-variable-management",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-to-send-posthog-conversion-events-to-meta-ads",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "combine-events-in-posthog-trends",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "posthog-vs-twilio-segment-product-analytics-or-cdp",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "how-to-save-ip-address-to-person-properties-in-posthog",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "hire-hyros-expert-guide",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "hire-posthog-expert-guide",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "how-to-build-consistent-utms-for-reliable-marketing-attribution",
+      "ok": true,
+      "similarity": 0.998,
+      "issues": []
+    },
+    {
+      "slug": "how-to-convert-currencies-in-posthog-and-track-revenue",
+      "ok": true,
+      "similarity": 0.998,
+      "issues": []
+    },
+    {
+      "slug": "best-ways-to-install-posthog-on-wordpress-in-2025",
+      "ok": true,
+      "similarity": 0.995,
+      "issues": []
+    },
+    {
+      "slug": "shopify-posthog-integration-methods",
+      "ok": true,
+      "similarity": 0.996,
+      "issues": []
+    },
+    {
+      "slug": "pre-lander-opt-in-form-a-b-test-which-form-converts-better",
+      "ok": true,
+      "similarity": 0.996,
+      "issues": []
+    },
+    {
+      "slug": "application-form-a-b-test-multiple-choice-vs-descriptive-question",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "webinar-wait-room-a-b-test-what-really-impacts-conversions",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "application-form-a-b-test-removing-the-urgency-question",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "relatability-a-b-test-the-power-of-being-understood",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "posthog-vs-hyros-the-better-fit-for-your-business",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "combined-form-a-b-test-can-fewer-steps-boost-conversion",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-to-reduce-your-posthog-costs",
+      "ok": true,
+      "similarity": 0.999,
+      "issues": []
+    },
+    {
+      "slug": "free-trial-vs-no-trial-what-really-drives-retention",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "testimonial-placement-a-b-test-is-first-impression-everything",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "social-proof-a-b-test-does-live-beat-static",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "video-length-a-b-test-does-shorter-mean-stronger",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "headline-battle-which-message-turns-viewers-into-buyers",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "video-control-a-b-test-does-no-skipping-mean-more-clicking",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "radio-buttons-vs-multiple-ctas-what-improved-conversions",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "headline-a-b-test-simplicity-sells-better-than-you-think",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "join-rate-a-b-test-can-timing-boost-signups",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-we-installed-posthog-on-clickfunnels",
+      "ok": true,
+      "similarity": 0.994,
+      "issues": []
+    },
+    {
+      "slug": "timestamp-a-b-test-does-time-help-or-hurt",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "how-to-setup-posthog-a-b-test-on-clickfunnels",
+      "ok": true,
+      "similarity": 0.974,
+      "issues": []
+    },
+    {
+      "slug": "testimonial-a-b-test-does-social-proof-really-boost-conversions",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "cta-button-a-b-test-animation-vs-no-animation",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "posthog-internal-user-filtering",
+      "ok": true,
+      "similarity": 0.998,
+      "issues": []
+    },
+    {
+      "slug": "posthog-slack-integration-send-event-alerts-to-slack",
+      "ok": true,
+      "similarity": 0.973,
+      "issues": []
+    },
+    {
+      "slug": "how-to-set-up-a-posthog-alert-for-your-website",
+      "ok": true,
+      "similarity": 0.998,
+      "issues": []
+    },
+    {
+      "slug": "posthog-experiment-naming-guidelines",
+      "ok": true,
+      "similarity": 0.994,
+      "issues": []
+    },
+    {
+      "slug": "how-to-setup-posthog-a-b-test-on-shopify",
+      "ok": true,
+      "similarity": 0.994,
+      "issues": []
+    },
+    {
+      "slug": "how-to-setup-posthog-a-b-test-on-wordpress",
+      "ok": true,
+      "similarity": 0.992,
+      "issues": []
+    },
+    {
+      "slug": "how-we-installed-posthog-on-shopify-and-captured-all-events",
+      "ok": true,
+      "similarity": 0.996,
+      "issues": []
+    },
+    {
+      "slug": "create-your-posthog-account",
+      "ok": true,
+      "similarity": 0.995,
+      "issues": []
+    },
+    {
+      "slug": "how-we-installed-posthog-on-wordpress",
+      "ok": true,
+      "similarity": 0.995,
+      "issues": []
+    }
+  ],
+  "pages": [
+    {
+      "slug": "my-account",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "register",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "subscribe",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "login",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "official-references-profiles",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "home",
+      "ok": true,
+      "similarity": 0.987,
+      "issues": []
+    },
+    {
+      "slug": "thank-you",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "hire-cro-expert",
+      "ok": true,
+      "similarity": 0.994,
+      "issues": []
+    },
+    {
+      "slug": "terms-of-use",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "contact-form",
+      "ok": true,
+      "similarity": 0.852,
+      "issues": []
+    },
+    {
+      "slug": "book-your-free-consultation",
+      "ok": true,
+      "similarity": 0.773,
+      "issues": []
+    },
+    {
+      "slug": "experiment-test-page",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    },
+    {
+      "slug": "academy",
+      "ok": true,
+      "similarity": 0.139,
+      "issues": []
+    },
+    {
+      "slug": "privacy-policy",
+      "ok": true,
+      "similarity": 1.0,
+      "issues": []
+    }
+  ]
+}
