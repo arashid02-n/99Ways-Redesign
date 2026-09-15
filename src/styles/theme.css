@@ -29,7 +29,7 @@
 	--color-surface: light-dark(#e6e5df, #3a3d39);
 	--color-text: light-dark(#292b2a, #f4f3ef);
 	--color-text-secondary: light-dark(#4a4d47, #b5b8b1);
-	--color-muted: light-dark(#676b65, #8f938c);
+	--color-muted: light-dark(#676b65, #b5b8b1);
 	--color-border: light-dark(#d8d7d0, #4a4d47);
 	--color-border-subtle: light-dark(#e6e5df, #3a3d39);
 
