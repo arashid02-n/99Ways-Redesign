@@ -20,14 +20,17 @@ const { items: results } = query
 	description="Search insights and pages"
 >
 	<section class="search-page">
-		<h1 class="search-title">Search</h1>
+		<header class="search-header">
+			<span class="eyebrow eyebrow--plain">Search</span>
+			<h1 class="search-title">Search</h1>
+		</header>
 
 		<form method="get" action="/search" class="search-form">
 			<input
 				type="search"
 				name="q"
 				value={query}
-				placeholder="Search insights and pages..."
+				placeholder="Search insights and pages…"
 				class="search-input"
 				autofocus
 			/>
@@ -53,6 +56,9 @@ const { items: results } = query
 								href={result.collection === "pages" ? `/pages/${result.slug ?? result.id}` : `/posts/${result.slug ?? result.id}`}
 								class="result-link"
 							>
+								<span class="result-type">
+									{result.collection === "pages" ? "Page" : "Article"}
+								</span>
 								<h2 class="result-title">
 									{result.title ?? "Untitled"}
 								</h2>
@@ -72,55 +78,86 @@ const { items: results } = query
 
 <style>
 	.search-page {
-		max-width: var(--max-width);
+		max-width: var(--slim-width);
 		margin: 0 auto;
-		padding: var(--spacing-8) var(--spacing-6) var(--spacing-16);
+		padding: var(--section-y) var(--page-gutter) var(--spacing-20);
+	}
+
+	.search-header {
+		margin-bottom: var(--spacing-10);
 	}
 
 	.search-title {
-		font-size: var(--font-size-2xl);
-		margin-bottom: var(--spacing-6);
+		font-size: var(--font-size-display);
+		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
+		line-height: var(--leading-tight);
+		margin-top: var(--spacing-3);
 	}
 
 	.search-form {
 		display: flex;
-		gap: var(--spacing-2);
-		margin-bottom: var(--spacing-8);
+		gap: var(--spacing-3);
+		margin-bottom: var(--spacing-10);
 	}
 
 	.search-input {
 		flex: 1;
-		padding: var(--spacing-2) var(--spacing-4);
+		padding: 0 var(--spacing-4);
+		height: 2.75rem;
 		font-size: var(--font-size-base);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius);
 		background: var(--color-bg);
 		color: var(--color-text);
+		transition:
+			border-color var(--transition-fast),
+			box-shadow var(--transition-fast);
 	}
 
 	.search-input:focus {
 		outline: none;
-		border-color: var(--color-brand);
+		border-color: var(--color-brand) !important;
+		box-shadow: var(--focus-ring);
 	}
 
 	.search-button {
-		padding: var(--spacing-2) var(--spacing-6);
-		font-size: var(--font-size-base);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 2.75rem;
+		padding: 0 var(--btn-pad-x);
+		font-family: var(--font-mono);
+		font-size: var(--btn-font-size);
+		font-weight: 600;
+		line-height: 1;
+		letter-spacing: var(--tracking-eyebrow);
+		text-transform: uppercase;
 		background: var(--color-brand);
 		color: var(--color-on-brand);
 		border: none;
 		border-radius: var(--radius);
 		cursor: pointer;
-		font-weight: 500;
+		transition: background var(--transition-fast);
 	}
 
 	.search-button:hover {
-		opacity: 0.9;
+		background: var(--color-brand-hover);
+	}
+
+	.search-button:focus-visible {
+		outline: none;
+		box-shadow: var(--focus-ring);
 	}
 
 	.search-summary {
+		font-family: var(--font-mono);
+		font-size: var(--font-size-kicker);
+		font-weight: 600;
+		letter-spacing: var(--tracking-eyebrow);
+		text-transform: uppercase;
 		color: var(--color-muted);
-		margin-bottom: var(--spacing-6);
+		margin-bottom: var(--spacing-8);
 	}
 
 	.search-hint {
@@ -133,19 +170,12 @@ const { items: results } = query
 		margin: 0;
 		display: flex;
 		flex-direction: column;
+		border-top: 1px solid var(--color-border-subtle);
 	}
 
 	.search-result {
 		padding: var(--spacing-6) 0;
 		border-bottom: 1px solid var(--color-border-subtle);
-	}
-
-	.search-result:first-child {
-		padding-top: 0;
-	}
-
-	.search-result:last-child {
-		border-bottom: none;
 	}
 
 	.result-link {
@@ -154,10 +184,21 @@ const { items: results } = query
 		color: inherit;
 	}
 
+	.result-type {
+		font-family: var(--font-mono);
+		font-size: var(--font-size-kicker);
+		font-weight: 600;
+		letter-spacing: var(--tracking-eyebrow);
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+
 	.result-title {
 		font-size: var(--font-size-xl);
 		font-weight: var(--font-weight-heading);
 		line-height: var(--leading-snug);
+		letter-spacing: var(--tracking-snug);
+		margin-top: var(--spacing-1);
 		margin-bottom: var(--spacing-2);
 		transition: color var(--transition-fast);
 	}
