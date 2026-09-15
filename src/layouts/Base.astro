@@ -51,6 +51,25 @@ const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}
 // Fetch primary menu defined in seed
 const menu = await getMenu("primary");
 
+// Core navigation stays in the header; legal/support links move to the footer
+const LEGAL_SUFFIXES = [
+	"/pages/official-references-profiles",
+	"/pages/privacy-policy",
+	"/pages/terms-of-use",
+];
+const menuItems = menu?.items ?? [];
+const navItems = menuItems.filter((item) =>
+	LEGAL_SUFFIXES.every((suffix) => item.url !== suffix)
+);
+const legalItems = menuItems.filter((item) =>
+	LEGAL_SUFFIXES.some((suffix) => item.url === suffix)
+);
+// The booking page is presented as the header's primary action
+const BOOKING_URL = "/pages/book-your-free-consultation";
+// Compare nav URLs ignoring a trailing slash on the current path
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const isActive = (url: string) => url.replace(/\/$/, "") === currentPath;
+
 // Build public page context for plugin contributions
 // SEO data is passed here and rendered securely by EmDashHead
 const pageCtx = createPublicPageContext({
@@ -120,11 +139,25 @@ const isLoggedIn = !!Astro.locals.user;
 					/>
 				<div class="nav-links">
 					{
-						menu?.items.map((item) => (
-							<a href={item.url} target={item.target}>
-								{item.label}
-							</a>
-						))
+						navItems.map((item) =>
+							item.url === BOOKING_URL ? (
+								<a
+									href={item.url}
+									target={item.target}
+									class={`btn btn--primary nav-cta${isActive(BOOKING_URL) ? " active" : ""}`}
+								>
+									{item.label}
+								</a>
+							) : (
+								<a
+									href={item.url}
+									target={item.target}
+									class={isActive(item.url) ? "active" : ""}
+								>
+									{item.label}
+								</a>
+							)
+						)
 					}
 				</div>
 				{
@@ -159,7 +192,7 @@ const isLoggedIn = !!Astro.locals.user;
 						<h4 class="footer-heading">Navigate</h4>
 						<ul class="footer-links">
 							{
-								menu?.items.map((item) => (
+								navItems.map((item) => (
 									<li>
 										<a href={item.url} target={item.target}>{item.label}</a>
 									</li>
@@ -174,6 +207,18 @@ const isLoggedIn = !!Astro.locals.user;
 							<li><a href="/category/guides-how-to">Guides &amp; How-tos</a></li>
 							<li><a href="/category/optimization-experience">Optimization Experiences</a></li>
 							<li><a href="/category/posthog-feature-breakdown">PostHog Feature Breakdowns</a></li>
+						</ul>
+					</div>
+					<div class="footer-col">
+						<h4 class="footer-heading">Company</h4>
+						<ul class="footer-links">
+							{
+								legalItems.map((item) => (
+									<li>
+										<a href={item.url} target={item.target}>{item.label}</a>
+									</li>
+								))
+							}
 						</ul>
 					</div>
 				</div>
@@ -427,9 +472,10 @@ const isLoggedIn = !!Astro.locals.user;
 				position: sticky;
 				top: 0;
 				z-index: 100;
-				background: color-mix(in srgb, var(--color-bg) 78%, transparent);
+				background: color-mix(in srgb, var(--color-bg) 85%, transparent);
 				backdrop-filter: blur(12px);
 				-webkit-backdrop-filter: blur(12px);
+				border-top: 3px solid var(--color-logo);
 				border-bottom: 1px solid var(--color-border-subtle);
 			}
 
@@ -439,7 +485,7 @@ const isLoggedIn = !!Astro.locals.user;
 				align-items: center;
 				max-width: var(--wide-width);
 				margin: 0 auto;
-				padding: var(--spacing-4) var(--spacing-6);
+				padding: var(--spacing-4) var(--page-gutter);
 				height: var(--nav-height);
 			}
 
@@ -476,23 +522,54 @@ const isLoggedIn = !!Astro.locals.user;
 
 			.nav-links a {
 				text-decoration: none;
-				color: var(--color-text-secondary);
+				color: var(--color-muted);
+				font-family: var(--font-mono);
+				font-size: var(--font-size-kicker);
+				font-weight: 600;
+				line-height: 1;
+				letter-spacing: var(--tracking-eyebrow);
+				text-transform: uppercase;
 				transition: color var(--transition-fast);
+				position: relative;
 			}
 
-			.nav-links a:hover {
+			.nav-links a:hover,
+			.nav-links a.active {
 				color: var(--color-text);
+			}
+
+			.nav-links a::after {
+				content: "";
+				position: absolute;
+				left: 0;
+				bottom: -4px;
+				height: 1px;
+				width: 0;
+				background: var(--color-brand);
+				transition: width var(--transition-fast);
+			}
+
+			.nav-links a:hover::after,
+			.nav-links a.active::after {
+				width: 100%;
 			}
 
 			.nav-cta {
 				display: inline-flex;
 				align-items: center;
-				padding: var(--spacing-2) var(--spacing-5);
-				font-size: var(--font-size-sm);
-				font-weight: 500;
+				height: 2rem;
+				padding-inline: var(--spacing-4);
+				margin-inline-start: var(--spacing-1);
+				font-family: var(--font-mono);
+				font-size: var(--font-size-kicker);
+				font-weight: 600;
+				line-height: 1;
+				letter-spacing: var(--tracking-eyebrow);
+				text-transform: uppercase;
 				background: var(--color-brand);
 				color: var(--color-on-brand);
-				border-radius: var(--radius);
+				border-radius: var(--btn-radius);
+				border: none;
 				text-decoration: none;
 				transition: background var(--transition-fast);
 			}
@@ -629,18 +706,19 @@ const isLoggedIn = !!Astro.locals.user;
 			.footer-inner {
 				max-width: var(--wide-width);
 				margin: 0 auto;
-				padding: var(--spacing-20) var(--spacing-6) var(--spacing-8);
+				padding: var(--section-y) var(--page-gutter) var(--spacing-8);
 			}
 
-		.footer-grid {
-			display: grid;
-			grid-template-columns: 2fr 1fr 1fr;
-			gap: var(--spacing-12);
-			margin-bottom: var(--spacing-16);
-		}
+			.footer-grid {
+				display: grid;
+				grid-template-columns: 1.5fr 1fr 1fr 1fr;
+				gap: var(--spacing-8);
+				margin-bottom: var(--spacing-12);
+			}
 
 			.footer-brand {
-				max-width: 320px;
+				max-width: none;
+				padding-right: var(--spacing-8);
 			}
 
 			.footer-logo {
@@ -675,10 +753,11 @@ const isLoggedIn = !!Astro.locals.user;
 			}
 
 			.footer-heading {
-				font-size: var(--font-size-xs);
+				font-family: var(--font-mono);
+				font-size: var(--font-size-kicker);
 				font-weight: 600;
 				text-transform: uppercase;
-				letter-spacing: var(--tracking-wider);
+				letter-spacing: var(--tracking-eyebrow);
 				color: var(--color-muted);
 				margin-bottom: var(--spacing-4);
 			}
@@ -759,13 +838,12 @@ const isLoggedIn = !!Astro.locals.user;
 
 			@media (max-width: 900px) {
 				.footer-grid {
-					grid-template-columns: 1fr 1fr;
-					gap: var(--spacing-8);
+					grid-template-columns: 1fr;
+					gap: var(--spacing-6);
 				}
 
 				.footer-brand {
-					grid-column: span 2;
-					max-width: none;
+					padding-right: 0;
 				}
 
 				.site-search {
