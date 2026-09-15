@@ -1,0 +1,145 @@
+---
+import { getEmDashCollection, getSiteSettings } from "emdash";
+import Base from "../layouts/Base.astro";
+import PostCard from "../components/PostCard.astro";
+import { getReadingTime } from "../utils/reading-time";
+import { resolveBlogSiteIdentity } from "../utils/site-identity";
+
+const [settings, { entries: posts, cacheHint }] = await Promise.all([
+	getSiteSettings(),
+	getEmDashCollection("posts", {
+		status: "published",
+		orderBy: { published_at: "desc" },
+		limit: 12,
+	}),
+]);
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const { siteTitle, siteTagline } = resolveBlogSiteIdentity(settings);
+---
+
+<Base title={siteTitle} description={siteTagline}>
+	<main class="home">
+		<section class="home-hero">
+			<h1 class="home-title">{siteTitle}</h1>
+			{
+				siteTagline && <p class="home-tagline">{siteTagline}</p>
+			}
+		</section>
+
+		<section class="home-posts">
+			<div class="home-posts-head">
+				<h2 class="home-posts-title">Latest posts</h2>
+				<a class="home-posts-link" href="/posts">View all →</a>
+			</div>
+			{
+				posts.length === 0 ? (
+					<p class="home-empty">No posts have been published yet.</p>
+				) : (
+					<div class="home-grid">
+						{
+							posts.map((post) => (
+								<PostCard
+									title={post.data.title ?? "Untitled"}
+									excerpt={post.data.excerpt}
+									featuredImage={post.data.featured_image}
+									href={`/posts/${post.id}`}
+									date={post.data.publishedAt ?? undefined}
+									readingTime={getReadingTime(post.data.content)}
+									tags={(post.data.terms?.tag ?? []).map((t) => ({
+										slug: t.slug,
+										label: t.label,
+									}))}
+									bylines={post.data.bylines ?? []}
+								/>
+							))
+						}
+					</div>
+				)
+			}
+		</section>
+	</main>
+</Base>
+
+<style>
+	.home {
+		max-width: var(--wide-width);
+		margin: 0 auto;
+		padding: 0 var(--spacing-6);
+	}
+
+	.home-hero {
+		padding: var(--spacing-24) 0 var(--spacing-12);
+		border-bottom: 1px solid var(--color-border-subtle);
+	}
+
+	.home-title {
+		font-size: clamp(var(--font-size-3xl), 6vw, var(--font-size-5xl));
+		font-weight: var(--font-weight-display);
+		line-height: 1.05;
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--spacing-4);
+	}
+
+	.home-tagline {
+		font-size: var(--font-size-xl);
+		line-height: var(--leading-relaxed);
+		color: var(--color-text-secondary);
+		max-width: 52ch;
+	}
+
+	.home-posts {
+		padding: var(--spacing-16) 0 var(--spacing-24);
+	}
+
+	.home-posts-head {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		margin-bottom: var(--spacing-10);
+	}
+
+	.home-posts-title {
+		font-size: var(--font-size-2xl);
+		font-weight: var(--font-weight-heading);
+		letter-spacing: var(--tracking-snug);
+	}
+
+	.home-posts-link {
+		font-family: var(--font-mono);
+		font-size: var(--font-size-sm);
+		color: var(--color-brand);
+		text-decoration: none;
+	}
+
+	.home-posts-link:hover {
+		color: var(--color-brand-hover);
+	}
+
+	.home-empty {
+		color: var(--color-muted);
+	}
+
+	.home-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-10) var(--spacing-8);
+	}
+
+	@media (max-width: 900px) {
+		.home {
+			padding: 0 var(--spacing-4);
+		}
+
+		.home-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 600px) {
+		.home-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
