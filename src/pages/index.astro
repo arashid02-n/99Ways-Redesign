@@ -1,145 +1,752 @@
 ---
-import { getEmDashCollection, getSiteSettings } from "emdash";
+import { getEmDashEntry, getEmDashCollection, getSiteSettings } from "emdash";
 import Base from "../layouts/Base.astro";
 import PostCard from "../components/PostCard.astro";
 import { getReadingTime } from "../utils/reading-time";
 import { resolveBlogSiteIdentity } from "../utils/site-identity";
 
-const [settings, { entries: posts, cacheHint }] = await Promise.all([
-	getSiteSettings(),
-	getEmDashCollection("posts", {
-		status: "published",
-		orderBy: { published_at: "desc" },
-		limit: 12,
-	}),
-]);
+const [settings, { entry: home }, { entries: posts, cacheHint }] =
+	await Promise.all([
+		getSiteSettings(),
+		getEmDashEntry("pages", "home"),
+		getEmDashCollection("posts", {
+			status: "published",
+			orderBy: { published_at: "desc" },
+			limit: 6,
+		}),
+	]);
 
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 
 const { siteTitle, siteTagline } = resolveBlogSiteIdentity(settings);
+
+/*
+ * The homepage is composed from the "home" page entry in the CMS. Its
+ * Portable Text blocks are mapped into a structured model here; the
+ * academy post list is fetched live from the posts collection.
+ */
+type ImageRef = { url: string; width?: number; height?: number; alt: string };
+type Cta = { label: string; href: string };
+type Pillar = {
+	image: ImageRef;
+	title: string;
+	description: string;
+	items: string[];
+	cta: Cta | null;
+};
+type Founder = { image: ImageRef; name: string; role: string; bio: string };
+type HomeModel = {
+	hero: { title: string; subtitle: string; cta: Cta };
+	mascot: ImageRef | null;
+	system: { title: string; pillars: Pillar[] };
+	founders: { title: string; people: Founder[] };
+	reviews: { title: string; images: ImageRef[] };
+	academy: { title: string; viewAll: string | null };
+};
+
+type Block = Record<string, any>;
+
+function blockText(block: Block): string {
+	return (block.children ?? [])
+		.filter((c: Block) => c._type === "span" && typeof c.text === "string")
+		.map((c: Block) => c.text)
+		.join("");
+}
+
+function blockHref(block: Block): string | null {
+	const link = (block.markDefs ?? []).find(
+		(md: Block) => md._type === "link" && typeof md.href === "string",
+	);
+	return link ? link.href : null;
+}
+
+function parseHomePage(blocks: Block[]): HomeModel {
+	const model: HomeModel = {
+		hero: { title: "", subtitle: "", cta: { label: "Book Intro Call", href: "#" } },
+		mascot: null,
+		system: { title: "", pillars: [] },
+		founders: { title: "", people: [] },
+		reviews: { title: "", images: [] },
+		academy: { title: "", viewAll: null },
+	};
+
+	let phase: "hero" | "system" | "founders" | "reviews" | "academy" | "tail" =
+		"hero";
+	let pillar: Pillar | null = null;
+	let person: Founder | null = null;
+	const paragraphs: string[] = [];
+
+	const closePillar = () => {
+		if (pillar) {
+			model.system.pillars.push(pillar);
+			pillar = null;
+		}
+	};
+	const closePerson = () => {
+		if (person) {
+			model.founders.people.push(person);
+			person = null;
+		}
+	};
+
+	for (const b of blocks) {
+		if (b._type === "image") {
+			const img: ImageRef = {
+				url: b.asset?.url ?? "",
+				width: b.width,
+				height: b.height,
+				alt: b.alt ?? "",
+			};
+			if (phase === "hero") model.mascot = img;
+			else if (phase === "system") {
+				closePillar();
+				pillar = { image: img, title: "", description: "", items: [], cta: null };
+			} else if (phase === "founders") {
+				closePerson();
+				person = { image: img, name: "", role: "", bio: "" };
+			} else if (phase === "reviews") model.reviews.images.push(img);
+			continue;
+		}
+		if (b._type !== "block") continue;
+
+		const style = b.style;
+		const rawText = blockText(b).trim();
+		const text = rawText.replace(/\s+/g, " ").trim();
+		const href = blockHref(b);
+
+		if (style === "h1") {
+			model.hero.title = text;
+			continue;
+		}
+		if (style === "h2") {
+			if (phase === "hero" && !model.hero.subtitle) {
+				model.hero.subtitle = text;
+				continue;
+			}
+			closePillar();
+			closePerson();
+			if (text === "The system behind predictable growth") {
+				phase = "system";
+				model.system.title = text;
+			} else if (text === "About Founders") {
+				phase = "founders";
+				model.founders.title = text;
+			} else if (text.includes("Review")) {
+				phase = "reviews";
+				model.reviews.title = text;
+			} else if (text.includes("Latest from") || text.includes("Academy")) {
+				phase = "academy";
+				model.academy.title = text;
+			} else {
+				phase = "tail";
+			}
+			continue;
+		}
+		if (style === "normal" && phase === "hero" && href) {
+			model.hero.cta = { label: text || model.hero.cta.label, href };
+			continue;
+		}
+		if (phase === "system" && pillar) {
+			if (style === "h3") {
+				pillar.title = text;
+			} else if (style === "normal") {
+				if (href) pillar.cta = { label: text, href };
+				else if (!pillar.description) pillar.description = text;
+				else if (pillar.items.length < 8) pillar.items.push(text);
+			}
+			continue;
+		}
+		if (phase === "founders" && person) {
+			if (style === "h3") person.name = text;
+			else if (style === "h6" && rawText) person.role = rawText;
+			else if (style === "normal" && text) paragraphs.push(text);
+			continue;
+		}
+		if (phase === "academy" && style === "h6") {
+			model.academy.viewAll = href && href !== "#" ? href : null;
+		}
+	}
+	closePillar();
+	closePerson();
+
+	// Assign bio paragraphs to founders in document order.
+	model.founders.people.forEach((p, i) => {
+		p.bio = paragraphs[i] ?? "";
+	});
+	return model;
+}
+
+const homeModel = parseHomePage(home?.data?.content ?? []);
+
+// "Book Intro Call" in the source content points at "#": wire it to the
+// existing scheduling page so the primary CTA is not a dead link.
+function resolveCta(cta: Cta | null): Cta {
+	if (!cta) return { label: "Book Intro Call", href: "/pages/book-your-free-consultation" };
+	const href = cta.href && cta.href !== "#" ? cta.href : "/pages/book-your-free-consultation";
+	return { label: cta.label, href };
+}
+
+const heroCta = resolveCta(homeModel.hero.cta);
+const system = homeModel.system;
+const founders = homeModel.founders;
+const reviews = homeModel.reviews;
+const academy = homeModel.academy;
+const mascot = homeModel.mascot;
+const foundCtas = resolveCta(null);
 ---
 
 <Base title={siteTitle} description={siteTagline}>
 	<main class="home">
-		<section class="home-hero">
-			<h1 class="home-title">{siteTitle}</h1>
-			{
-				siteTagline && <p class="home-tagline">{siteTagline}</p>
-			}
-		</section>
-
-		<section class="home-posts">
-			<div class="home-posts-head">
-				<h2 class="home-posts-title">Latest posts</h2>
-				<a class="home-posts-link" href="/posts">View all →</a>
-			</div>
-			{
-				posts.length === 0 ? (
-					<p class="home-empty">No posts have been published yet.</p>
-				) : (
-					<div class="home-grid">
-						{
-							posts.map((post) => (
-								<PostCard
-									title={post.data.title ?? "Untitled"}
-									excerpt={post.data.excerpt}
-									featuredImage={post.data.featured_image}
-									href={`/posts/${post.id}`}
-									date={post.data.publishedAt ?? undefined}
-									readingTime={getReadingTime(post.data.content)}
-									tags={(post.data.terms?.tag ?? []).map((t) => ({
-										slug: t.slug,
-										label: t.label,
-									}))}
-									bylines={post.data.bylines ?? []}
+		<!-- 01 · Hero -->
+		<header class="hero">
+			<div class="hero-inner">
+				<div class="hero-copy">
+					<span class="eyebrow">{siteTagline}</span>
+					<h1 class="hero-title">{homeModel.hero.title}</h1>
+					<p class="hero-sub">{homeModel.hero.subtitle}</p>
+					<a class="btn btn--primary hero-cta" href={heroCta.href}>
+						{heroCta.label}
+					</a>
+				</div>
+				{
+					mascot?.url && (
+						<figure class="hero-art">
+							<div class="hero-art-grid">
+								<img
+									src={mascot.url}
+									width={mascot.width}
+									height={mascot.height}
+									alt=""
+									class="hero-mascot"
+									fetchpriority="high"
 								/>
-							))
+							</div>
+						</figure>
+					)
+				}
+			</div>
+		</header>
+
+		<!-- 02 · The system behind predictable growth -->
+		{
+			system.pillars.length > 0 && (
+				<section class="section system">
+					<div class="section-head">
+						<span class="eyebrow">01</span>
+						<h2 class="section-title">{system.title}</h2>
+					</div>
+					<div class="system-grid">
+						{system.pillars.map((pillar, i) => (
+							<article class="pillar">
+								<div class="pillar-frame">
+									<span class="pillar-index">{String(i + 1).padStart(2, "0")}</span>
+									{
+										pillar.image.url && (
+											<img
+												src={pillar.image.url}
+												width={pillar.image.width}
+												height={pillar.image.height}
+												alt={pillar.image.alt}
+												loading="lazy"
+												class="pillar-diagram"
+											/>
+										)
+									}
+								</div>
+								<h3 class="pillar-title">{pillar.title}</h3>
+								<p class="pillar-desc">{pillar.description}</p>
+								<ul class="pillar-items">
+									{pillar.items.map((item) => (
+										<li class="pillar-item">{item}</li>
+									))}
+								</ul>
+								{
+									pillar.cta && (
+										<a class="pillar-cta" href={resolveCta(pillar.cta).href}>
+											{pillar.cta.label}
+										</a>
+									)
+								}
+							</article>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		<!-- 03 · About Founders -->
+		{
+			founders.people.length > 0 && (
+				<section class="section founders">
+					<div class="section-head">
+						<span class="eyebrow">02</span>
+						<h2 class="section-title">{founders.title}</h2>
+					</div>
+					<div class="founders-grid">
+						{founders.people.map((person) => (
+							<article class="founder">
+								{
+									person.image.url && (
+										<figure class="founder-figure">
+											<img
+												src={person.image.url}
+												width={person.image.width}
+												height={person.image.height}
+												alt={person.name}
+												loading="lazy"
+												class="founder-portrait"
+											/>
+										</figure>
+									)
+								}
+								<h3 class="founder-name">{person.name}</h3>
+								<p class="founder-role">{person.role}</p>
+								<p class="founder-bio">{person.bio}</p>
+							</article>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		<!-- 04 · How Others Reviewed 99Ways -->
+		{
+			reviews.images.length > 0 && (
+				<section class="section reviews">
+					<div class="section-head">
+						<span class="eyebrow">03</span>
+						<h2 class="section-title">{reviews.title}</h2>
+					</div>
+					<div class="reviews-grid">
+						{reviews.images.map((img, i) => (
+							<figure class="review-fig">
+								<img
+									src={img.url}
+									width={img.width}
+									height={img.height}
+									alt={img.alt || "Client review"}
+									loading="lazy"
+									class="review-short"
+								/>
+							</figure>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		<!-- 05 · Latest from 99Ways Academy -->
+		{
+			academy.title && (
+				<section class="section academy">
+					<div class="section-head">
+						<span class="eyebrow">04</span>
+						<h2 class="section-title">{academy.title}</h2>
+						{
+							academy.viewAll && (
+								<a class="section-link" href={academy.viewAll}>View all posts</a>
+							)
 						}
 					</div>
-				)
-			}
-		</section>
+					{
+						posts.length === 0 ? (
+							<p class="home-empty">No posts have been published yet.</p>
+						) : (
+							<div class="academy-grid">
+								{posts.map((post) => (
+									<PostCard
+										title={post.data.title ?? "Untitled"}
+										excerpt={post.data.excerpt}
+										featuredImage={post.data.featured_image}
+										href={`/posts/${post.id}`}
+										date={post.data.publishedAt ?? undefined}
+										readingTime={getReadingTime(post.data.content)}
+										tags={(post.data.terms?.tag ?? []).map((t) => ({
+											slug: t.slug,
+											label: t.label,
+										}))}
+										bylines={post.data.bylines ?? []}
+									/>
+								))}
+							</div>
+						)
+					}
+				</section>
+			)
+		}
 	</main>
 </Base>
 
 <style>
 	.home {
-		max-width: var(--wide-width);
-		margin: 0 auto;
-		padding: 0 var(--spacing-6);
+		overflow: clip;
 	}
 
-	.home-hero {
-		padding: var(--spacing-24) 0 var(--spacing-12);
+	/* ---------- Hero ---------- */
+	.hero {
 		border-bottom: 1px solid var(--color-border-subtle);
 	}
 
-	.home-title {
-		font-size: clamp(var(--font-size-3xl), 6vw, var(--font-size-5xl));
-		font-weight: var(--font-weight-display);
-		line-height: 1.05;
-		letter-spacing: var(--tracking-tight);
-		margin-bottom: var(--spacing-4);
+	.hero-inner {
+		display: grid;
+		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+		align-items: center;
+		gap: var(--spacing-16);
+		max-width: var(--wide-width);
+		margin: 0 auto;
+		padding: clamp(5rem, 12vw, 9rem) var(--page-gutter)
+			clamp(4rem, 8vw, 7rem);
 	}
 
-	.home-tagline {
+	.hero-title {
+		margin-top: var(--spacing-6);
+		font-size: var(--font-size-hero);
+		line-height: 1.04;
+		letter-spacing: -0.02em;
+		max-width: 15ch;
+	}
+
+	.hero-sub {
+		margin-top: var(--spacing-8);
 		font-size: var(--font-size-xl);
 		line-height: var(--leading-relaxed);
 		color: var(--color-text-secondary);
-		max-width: 52ch;
+		max-width: 46ch;
 	}
 
-	.home-posts {
-		padding: var(--spacing-16) 0 var(--spacing-24);
+	.hero-cta {
+		margin-top: var(--spacing-10);
 	}
 
-	.home-posts-head {
+	.hero-art {
+		margin: 0;
+	}
+
+	.hero-art-grid {
+		position: relative;
+		display: grid;
+		place-items: center;
+		aspect-ratio: 1;
+		max-width: 420px;
+		margin: 0 auto;
+		border: 1px solid var(--color-border);
+		background:
+			linear-gradient(var(--color-border-subtle) 1px, transparent 1px),
+			linear-gradient(90deg, var(--color-border-subtle) 1px, transparent 1px);
+		background-size: 28px 28px;
+	}
+
+	.hero-art-grid::before,
+	.hero-art-grid::after {
+		content: "";
+		position: absolute;
+		inset: 0 50% 0 -1px;
+		width: 2px;
+		background: var(--color-border-subtle);
+	}
+	.hero-art-grid::after {
+		inset: 50% 0 -1px 0;
+		height: 2px;
+		width: auto;
+	}
+
+	.hero-mascot {
+		position: relative;
+		z-index: 1;
+		width: min(72%, 340px);
+		height: auto;
+		filter: drop-shadow(0 24px 48px rgba(41, 43, 42, 0.18));
+	}
+
+	/* ---------- Shared sections ---------- */
+	.section {
+		padding: var(--section-y) var(--page-gutter);
+	}
+
+	.section + .section {
+		border-top: 1px solid var(--color-border-subtle);
+	}
+
+	.section-head {
 		display: flex;
 		align-items: flex-end;
+		flex-wrap: wrap;
+		gap: var(--spacing-6);
 		justify-content: space-between;
-		margin-bottom: var(--spacing-10);
+		max-width: var(--wide-width);
+		margin: 0 auto var(--spacing-16);
 	}
 
-	.home-posts-title {
-		font-size: var(--font-size-2xl);
-		font-weight: var(--font-weight-heading);
-		letter-spacing: var(--tracking-snug);
+	.section-title {
+		font-size: var(--font-size-section);
+		letter-spacing: -0.01em;
+		max-width: 24ch;
 	}
 
-	.home-posts-link {
+	.section-link {
 		font-family: var(--font-mono);
 		font-size: var(--font-size-sm);
+		font-weight: 600;
 		color: var(--color-brand);
 		text-decoration: none;
+		padding-bottom: 2px;
+		border-bottom: 1px solid var(--color-brand);
 	}
 
-	.home-posts-link:hover {
+	.section-link:hover {
 		color: var(--color-brand-hover);
+		border-color: var(--color-brand-hover);
+	}
+
+	/* ---------- System / pillars ---------- */
+	.system-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-8);
+		max-width: var(--wide-width);
+		margin: 0 auto;
+	}
+
+	.pillar {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.pillar-frame {
+		position: relative;
+		width: 100%;
+		border: 1px solid var(--color-border);
+		background: var(--color-bg-subtle);
+		margin-bottom: var(--spacing-6);
+		overflow: hidden;
+	}
+
+	.pillar-index {
+		position: absolute;
+		top: var(--spacing-2);
+		left: var(--spacing-3);
+		font-family: var(--font-mono);
+		font-size: var(--font-size-kicker);
+		font-weight: 600;
+		letter-spacing: var(--tracking-eyebrow);
+		color: var(--color-brand);
+		background: var(--color-bg);
+		padding: 2px 6px;
+		border: 1px solid var(--color-border);
+	}
+
+	.pillar-diagram {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 478 / 327;
+		object-fit: contain;
+		background: var(--color-bg-subtle);
+	}
+
+	.pillar-title {
+		font-size: var(--font-size-xl);
+		margin-bottom: var(--spacing-3);
+	}
+
+	.pillar-desc {
+		font-size: var(--font-size-base);
+		line-height: var(--leading-relaxed);
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-5);
+	}
+
+	.pillar-items {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 var(--spacing-5);
+		border-top: 1px solid var(--color-border-subtle);
+	}
+
+	.pillar-item {
+		display: flex;
+		align-items: baseline;
+		gap: var(--spacing-3);
+		padding: var(--spacing-3) 0;
+		border-bottom: 1px solid var(--color-border-subtle);
+		font-size: var(--font-size-sm);
+		color: var(--color-text);
+	}
+
+	.pillar-item::before {
+		content: "＋";
+		font-family: var(--font-mono);
+		font-size: var(--font-size-xs);
+		color: var(--color-brand);
+		flex-shrink: 0;
+	}
+
+	.pillar-cta {
+		margin-top: auto;
+		font-family: var(--font-mono);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-brand);
+		text-decoration: none;
+		padding-bottom: 2px;
+		border-bottom: 1px solid var(--color-brand);
+		align-self: flex-start;
+	}
+
+	.pillar-cta:hover {
+		color: var(--color-brand-hover);
+		border-color: var(--color-brand-hover);
+	}
+
+	/* ---------- Founders ---------- */
+	.founders-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--spacing-16) var(--spacing-12);
+		max-width: var(--wide-width);
+		margin: 0 auto;
+	}
+
+	.founder-figure {
+		margin: 0 0 var(--spacing-6);
+		aspect-ratio: 4 / 5;
+		overflow: hidden;
+		border: 1px solid var(--color-border);
+		background: var(--color-bg-subtle);
+	}
+
+	.founder-portrait {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: saturate(0.92);
+	}
+
+	.founder-name {
+		font-size: var(--font-size-display);
+		margin-bottom: var(--spacing-2);
+	}
+
+	.founder-role {
+		font-family: var(--font-mono);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		letter-spacing: var(--tracking-eyebrow);
+		text-transform: uppercase;
+		color: var(--color-brand);
+		margin-bottom: var(--spacing-6);
+		white-space: pre-line;
+	}
+
+	.founder-bio {
+		font-size: var(--font-size-base);
+		line-height: var(--leading-relaxed);
+		color: var(--color-text-secondary);
+		max-width: 56ch;
+	}
+
+	/* ---------- Reviews ---------- */
+	.reviews-grid {
+		columns: 3;
+		column-gap: var(--spacing-6);
+		max-width: var(--wide-width);
+		margin: 0 auto;
+	}
+
+	.review-fig {
+		margin: 0 0 var(--spacing-6);
+		break-inside: avoid;
+		padding: var(--spacing-3);
+		border: 1px solid var(--color-border);
+		background: var(--color-bg-subtle);
+		transition:
+			border-color var(--transition-base),
+			transform var(--transition-base);
+	}
+
+	.review-fig:hover {
+		border-color: var(--color-border);
+		transform: translateY(-2px);
+	}
+
+	.review-short {
+		width: 100%;
+		height: auto;
+		border-radius: 2px;
+	}
+
+	/* ---------- Academy ---------- */
+	.academy-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-10) var(--spacing-8);
+		max-width: var(--wide-width);
+		margin: 0 auto;
 	}
 
 	.home-empty {
 		color: var(--color-muted);
+		max-width: var(--wide-width);
+		margin: 0 auto;
 	}
 
-	.home-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-10) var(--spacing-8);
-	}
-
+	/* ---------- Responsive ---------- */
 	@media (max-width: 900px) {
-		.home {
-			padding: 0 var(--spacing-4);
+		.hero-inner {
+			grid-template-columns: 1fr;
+			gap: var(--spacing-12);
+			padding-top: clamp(4rem, 12vw, 6rem);
 		}
 
-		.home-grid {
+		.hero-art {
+			order: 2;
+		}
+
+		.hero-art-grid {
+			max-width: 320px;
+		}
+
+		.hero-title {
+			max-width: 20ch;
+		}
+
+		.system-grid,
+		.academy-grid {
 			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.reviews-grid {
+			columns: 2;
+		}
+
+		.founders-grid {
+			grid-template-columns: 1fr;
+			gap: var(--spacing-12);
+		}
+
+		.founder-figure {
+			aspect-ratio: 4 / 5;
+			max-width: 420px;
 		}
 	}
 
 	@media (max-width: 600px) {
-		.home-grid {
+		.system-grid,
+		.academy-grid,
+		.reviews-grid {
 			grid-template-columns: 1fr;
+			columns: 1;
+		}
+
+		.hero-sub {
+			font-size: var(--font-size-lg);
+		}
+
+		.section-head {
+			margin-bottom: var(--spacing-10);
+		}
+
+		.founder-name {
+			font-size: var(--font-size-section);
 		}
 	}
 </style>
