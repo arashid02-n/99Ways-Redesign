@@ -7,7 +7,6 @@ import {
 	EmDashBodyEnd,
 } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
-import LiveSearch from "emdash/ui/search";
 import { Font } from "astro:assets";
 import { resolveBlogSiteIdentity } from "../utils/site-identity";
 import Logo from "../components/Logo.astro";
@@ -64,8 +63,6 @@ const navItems = menuItems.filter((item) =>
 const legalItems = menuItems.filter((item) =>
 	LEGAL_SUFFIXES.some((suffix) => item.url === suffix)
 );
-// The booking page is presented as the header's primary action
-const BOOKING_URL = "/pages/book-your-free-consultation";
 // Compare nav URLs ignoring a trailing slash on the current path
 const currentPath = Astro.url.pathname.replace(/\/$/, "");
 const isActive = (url: string) => url.replace(/\/$/, "") === currentPath;
@@ -123,42 +120,88 @@ const isLoggedIn = !!Astro.locals.user;
 	</head>
 	<body>
 		<EmDashBodyStart page={pageCtx} />
-		<header class="site-header">
-			<nav class="nav">
-			<a href="/" class="site-title" aria-label="99Ways — home">
+	<header class="site-header">
+		<nav class="nav" aria-label="Primary">
+			<a href="/" class="brand" aria-label="99Ways — home">
+				<img
+					class="brand-frog"
+					src="/_emdash/api/media/file/01M2JA3P4EGPSMNYQYM41QKSVA.webp"
+					alt="99Ways frog mascot"
+					width="44"
+					height="44"
+					fetchpriority="high"
+				/>
 				<Logo />
 			</a>
-				<div class="nav-right">
-					<LiveSearch
-						placeholder="Search"
-						class="site-search"
-						inputClass="site-search-input"
-						resultsClass="site-search-results"
-						resultClass="site-search-result"
-						collections={["posts", "pages"]}
-					/>
-				<div class="nav-links">
-					{
-						navItems.map((item) =>
-							item.url === BOOKING_URL ? (
-								<a
-									href={item.url}
-									target={item.target}
-									class={`btn btn--primary nav-cta${isActive(BOOKING_URL) ? " active" : ""}`}
-								>
-									{item.label}
-								</a>
-							) : (
-								<a
-									href={item.url}
-									target={item.target}
-									class={isActive(item.url) ? "active" : ""}
-								>
-									{item.label}
-								</a>
-							)
-						)
-					}
+			<div class="nav-right">
+				<button
+					type="button"
+					class="nav-toggle"
+					aria-expanded="false"
+					aria-controls="site-nav-links"
+					aria-label="Menu"
+				>
+					<span class="nav-toggle-bar"></span>
+					<span class="nav-toggle-bar"></span>
+					<span class="nav-toggle-bar"></span>
+				</button>
+				<div class="nav-links" id="site-nav-links">
+					<div class="nav-drop">
+						<button
+							type="button"
+							class:list={[
+								"nav-top",
+								(isActive("/category/guides-how-to") ||
+									isActive("/category/posthog-feature-breakdown") ||
+									isActive("/category/tools-comparison") ||
+									isActive("/category/optimization-experience") ||
+									isActive("/category/featured-experiments")) &&
+									"active-parent",
+							]}
+							aria-haspopup="true"
+							aria-expanded="false"
+						>
+							Resources
+							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+						</button>
+						<div class="nav-menu" aria-label="Resources">
+							<p class="nav-menu-kicker">Learn</p>
+							<a href="/category/guides-how-to" class={isActive("/category/guides-how-to") ? "active" : ""}>Guides and How-tos <span class="nav-arrow" aria-hidden="true">→</span></a>
+							<a href="/category/posthog-feature-breakdown" class={isActive("/category/posthog-feature-breakdown") ? "active" : ""}>PostHog Feature Breakdowns <span class="nav-arrow" aria-hidden="true">→</span></a>
+							<a href="/category/tools-comparison" class={isActive("/category/tools-comparison") ? "active" : ""}>Tools Comparison <span class="nav-arrow" aria-hidden="true">→</span></a>
+							<a href="/category/optimization-experience" class={isActive("/category/optimization-experience") ? "active" : ""}>Optimization Experiences <span class="nav-arrow" aria-hidden="true">→</span></a>
+							<a href="/category/featured-experiments" class={isActive("/category/featured-experiments") ? "active" : ""}>Featured Experiments <span class="nav-arrow" aria-hidden="true">→</span></a>
+						</div>
+					</div>
+					<div class="nav-drop">
+						<button
+							type="button"
+							class:list={[
+								"nav-top",
+								(isActive("/pages/hire-cro-expert") ||
+									isActive("/posts/hire-posthog-expert-guide") ||
+									isActive("/posts/hire-hyros-expert-guide")) &&
+									"active-parent",
+							]}
+							aria-haspopup="true"
+							aria-expanded="false"
+						>
+							Services
+							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+						</button>
+						<div class="nav-menu" aria-label="Services">
+							<p class="nav-menu-kicker">Work with us</p>
+							<a href="/pages/hire-cro-expert" class={isActive("/pages/hire-cro-expert") ? "active" : ""}>Conversion Rate Optimization <span class="nav-arrow" aria-hidden="true">→</span></a>
+							<a href="/posts/hire-posthog-expert-guide" class={isActive("/posts/hire-posthog-expert-guide") ? "active" : ""}>PostHog &amp; Product Analytics <span class="nav-arrow" aria-hidden="true">→</span></a>
+							<a href="/posts/hire-hyros-expert-guide" class={isActive("/posts/hire-hyros-expert-guide") ? "active" : ""}>Hyros &amp; Tracking Setup <span class="nav-arrow" aria-hidden="true">→</span></a>
+						</div>
+					</div>
+					<a
+						href="/pages/contact-form"
+						class:list={["nav-contact", isActive("/pages/contact-form") && "active"]}
+					>
+						Contact Us
+					</a>
 				</div>
 				{
 						isLoggedIn && (
@@ -167,9 +210,9 @@ const isLoggedIn = !!Astro.locals.user;
 							</a>
 						)
 					}
-				</div>
-			</nav>
-		</header>
+			</div>
+		</nav>
+	</header>
 
 		<main>
 			<slot />
@@ -468,230 +511,328 @@ const isLoggedIn = !!Astro.locals.user;
 		</style>
 
 		<style>
-			.site-header {
-				position: sticky;
-				top: 0;
-				z-index: 100;
-				background: color-mix(in srgb, var(--color-bg) 85%, transparent);
-				backdrop-filter: blur(12px);
-				-webkit-backdrop-filter: blur(12px);
-				border-top: 3px solid var(--color-logo);
-				border-bottom: 1px solid var(--color-border-subtle);
-			}
+		.site-header {
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+			backdrop-filter: blur(14px);
+			-webkit-backdrop-filter: blur(14px);
+			border-top: 3px solid var(--color-logo);
+			border-bottom: 1px solid var(--color-border-subtle);
+			box-shadow: 0 8px 24px -18px color-mix(in srgb, var(--color-text) 35%, transparent);
+		}
 
-			.nav {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				max-width: var(--wide-width);
-				margin: 0 auto;
-				padding: var(--spacing-4) var(--page-gutter);
-				height: var(--nav-height);
-			}
+		.nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: var(--spacing-4);
+			max-width: var(--wide-width);
+			margin: 0 auto;
+			padding: var(--spacing-3) var(--page-gutter);
+			min-height: var(--nav-height);
+		}
 
-			.site-title {
-				font-size: var(--font-size-lg);
-				font-weight: 700;
-				color: var(--color-text);
-				text-decoration: none;
-				letter-spacing: var(--tracking-snug);
-			}
+		.brand {
+			display: inline-flex;
+			align-items: center;
+			gap: var(--spacing-3);
+			color: var(--color-text);
+			text-decoration: none;
+			min-width: 0;
+		}
 
-			.site-title:hover {
-				color: var(--color-text);
-			}
+		.brand-frog {
+			width: 44px;
+			height: 44px;
+			border-radius: 50%;
+			object-fit: cover;
+			display: block;
+			background: var(--color-surface);
+			border: 1px solid var(--color-border);
+			box-shadow: var(--shadow-sm);
+		}
 
-			.site-logo-img {
-				height: 32px;
-				width: auto;
-				display: block;
-			}
+		.brand:hover .brand-frog {
+			animation: frog-hop 0.55s ease;
+		}
 
-			.nav-right {
-				display: flex;
-				align-items: center;
-				gap: var(--spacing-6);
-				margin-inline-start: auto;
+		@keyframes frog-hop {
+			0% { transform: translateY(0) rotate(0deg); }
+			35% { transform: translateY(-7px) rotate(-6deg); }
+			70% { transform: translateY(0) rotate(4deg); }
+			100% { transform: translateY(0) rotate(0deg); }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.brand:hover .brand-frog {
+				animation: none;
+			}
+		}
+
+		.nav-right {
+			display: flex;
+			align-items: center;
+			gap: var(--spacing-5);
+			margin-inline-start: auto;
+		}
+
+		.nav-toggle {
+			display: none;
+			flex-direction: column;
+			justify-content: center;
+			gap: 5px;
+			width: 40px;
+			height: 40px;
+			padding: 0 10px;
+			background: transparent;
+			border: 1px solid var(--color-border);
+			border-radius: var(--radius);
+			cursor: pointer;
+		}
+
+		.nav-toggle-bar {
+			display: block;
+			height: 2px;
+			width: 100%;
+			background: var(--color-text);
+			border-radius: 2px;
+			transition: transform var(--transition-fast), opacity var(--transition-fast);
+		}
+
+		.nav-links {
+			display: flex;
+			align-items: center;
+			gap: var(--spacing-2);
+			font-size: var(--font-size-sm);
+		}
+
+		.nav-drop {
+			position: relative;
+		}
+
+		.nav-top {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.375rem;
+			padding: var(--spacing-2) var(--spacing-3);
+			background: transparent;
+			border: none;
+			border-radius: var(--radius);
+			cursor: pointer;
+			color: var(--color-muted);
+			font-family: var(--font-mono);
+			font-size: var(--font-size-kicker);
+			font-weight: 600;
+			line-height: 1;
+			letter-spacing: var(--tracking-eyebrow);
+			text-transform: uppercase;
+			transition: color var(--transition-fast), background var(--transition-fast);
+		}
+
+		.nav-top:hover,
+		.nav-drop:hover .nav-top,
+		.nav-drop:focus-within .nav-top,
+		.nav-drop.open .nav-top,
+		.nav-top.active-parent {
+			color: var(--color-text);
+			background: var(--color-surface);
+		}
+
+		.nav-top svg {
+			transition: transform var(--transition-fast);
+		}
+
+		.nav-drop:hover .nav-top svg,
+		.nav-drop:focus-within .nav-top svg,
+		.nav-drop.open .nav-top svg {
+			transform: rotate(180deg);
+		}
+
+		.nav-menu {
+			position: absolute;
+			top: calc(100% + 10px);
+			left: 0;
+			min-width: 320px;
+			padding: var(--spacing-3);
+			padding-top: calc(var(--spacing-3) + 3px);
+			background: var(--color-bg);
+			border: 1px solid var(--color-border);
+			border-radius: var(--radius-lg);
+			box-shadow: var(--shadow-lg);
+			overflow: hidden;
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(8px);
+			transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+			z-index: 200;
+		}
+
+		.nav-menu::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 3px;
+			background: linear-gradient(90deg, var(--color-success), var(--color-brand));
+		}
+
+		.nav-drop:hover .nav-menu,
+		.nav-drop:focus-within .nav-menu,
+		.nav-drop.open .nav-menu {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(0);
+		}
+
+		.nav-menu-kicker {
+			padding: var(--spacing-2) var(--spacing-3) var(--spacing-1);
+			font-family: var(--font-mono);
+			font-size: var(--font-size-xs);
+			font-weight: 600;
+			letter-spacing: var(--tracking-eyebrow);
+			text-transform: uppercase;
+			color: var(--color-muted);
+		}
+
+		.nav-menu a {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: var(--spacing-3);
+			padding: var(--spacing-3);
+			border-radius: var(--radius);
+			color: var(--color-text-secondary);
+			text-decoration: none;
+			font-size: var(--font-size-sm);
+			font-weight: 500;
+			transition: background var(--transition-fast), color var(--transition-fast);
+		}
+
+		.nav-menu a:hover,
+		.nav-menu a.active {
+			background: var(--color-surface);
+			color: var(--color-text);
+		}
+
+		.nav-menu a .nav-arrow {
+			opacity: 0;
+			transform: translateX(-4px);
+			transition: opacity var(--transition-fast), transform var(--transition-fast);
+			color: var(--color-success);
+		}
+
+		.nav-menu a:hover .nav-arrow,
+		.nav-menu a.active .nav-arrow {
+			opacity: 1;
+			transform: translateX(0);
+		}
+
+		.nav-contact {
+			display: inline-flex;
+			align-items: center;
+			margin-inline-start: var(--spacing-2);
+			padding: 0.625rem 1.375rem;
+			border-radius: 999px;
+			background: var(--color-text);
+			color: var(--color-bg);
+			font-family: var(--font-mono);
+			font-size: var(--font-size-kicker);
+			font-weight: 700;
+			line-height: 1;
+			letter-spacing: var(--tracking-eyebrow);
+			text-transform: uppercase;
+			text-decoration: none;
+			border: 1px solid transparent;
+			box-shadow: var(--shadow-sm);
+			transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+		}
+
+		.nav-contact:hover {
+			background: var(--color-success);
+			color: #fff;
+			transform: translateY(-1px);
+			box-shadow: var(--shadow-lg);
+		}
+
+		.nav-contact.active {
+			outline: 2px solid var(--color-success);
+			outline-offset: 2px;
+		}
+
+		.nav-admin {
+			font-size: var(--font-size-sm);
+			color: var(--color-text-secondary);
+			text-decoration: none;
+			transition: color var(--transition-fast);
+		}
+
+		.nav-admin:hover {
+			color: var(--color-text);
+		}
+
+		@media (max-width: 760px) {
+			.nav-toggle {
+				display: inline-flex;
 			}
 
 			.nav-links {
-				display: flex;
-				gap: var(--spacing-6);
-				font-size: var(--font-size-sm);
-			}
-
-			.nav-links a {
-				text-decoration: none;
-				color: var(--color-muted);
-				font-family: var(--font-mono);
-				font-size: var(--font-size-kicker);
-				font-weight: 600;
-				line-height: 1;
-				letter-spacing: var(--tracking-eyebrow);
-				text-transform: uppercase;
-				transition: color var(--transition-fast);
-				position: relative;
-			}
-
-			.nav-links a:hover,
-			.nav-links a.active {
-				color: var(--color-text);
-			}
-
-			.nav-links a::after {
-				content: "";
-				position: absolute;
-				left: 0;
-				bottom: -4px;
-				height: 1px;
-				width: 0;
-				background: var(--color-brand);
-				transition: width var(--transition-fast);
-			}
-
-			.nav-links a:hover::after,
-			.nav-links a.active::after {
-				width: 100%;
-			}
-
-			.nav-cta {
-				display: inline-flex;
-				align-items: center;
-				height: 2rem;
-				padding-inline: var(--spacing-4);
-				margin-inline-start: var(--spacing-1);
-				font-family: var(--font-mono);
-				font-size: var(--font-size-kicker);
-				font-weight: 600;
-				line-height: 1;
-				letter-spacing: var(--tracking-eyebrow);
-				text-transform: uppercase;
-				background: var(--color-brand);
-				color: var(--color-on-brand);
-				border-radius: var(--btn-radius);
-				border: none;
-				text-decoration: none;
-				transition: background var(--transition-fast);
-			}
-
-			.nav-cta:hover {
-				background: var(--color-brand-hover);
-				color: var(--color-on-brand);
-			}
-
-			.nav-admin {
-				font-size: var(--font-size-sm);
-				color: var(--color-text-secondary);
-				text-decoration: none;
-				transition: color var(--transition-fast);
-			}
-
-			.nav-admin:hover {
-				color: var(--color-text);
-			}
-
-			/* Search styling */
-			.site-search {
-				position: relative;
-				width: var(--search-input-width);
-				--emdash-search-border-focus: var(--color-brand);
-			}
-
-			:global(.site-search-input) {
-				width: var(--search-input-width);
-				padding: var(--spacing-2) var(--spacing-3);
-				font-family: var(--font-body);
-				font-size: var(--font-size-sm);
-				border: 1px solid var(--color-border);
-				border-radius: var(--radius);
-				background: var(--color-bg);
-				color: var(--color-text);
-				transition:
-					border-color var(--transition-fast),
-					box-shadow var(--transition-fast);
-			}
-
-			:global(.site-search-input)::placeholder {
-				color: var(--color-muted);
-			}
-
-			:global(.site-search-input):focus,
-			:global(.site-search-input):focus-visible {
-				outline: none;
-				border-color: var(--color-brand) !important;
-				box-shadow: 0 0 0 3px var(--color-brand-ring);
-			}
-
-			:global(.site-search-results) {
+				display: none;
 				position: absolute;
 				top: 100%;
 				left: 0;
 				right: 0;
-				margin-top: var(--spacing-2);
+				flex-direction: column;
+				align-items: stretch;
+				gap: var(--spacing-2);
+				padding: var(--spacing-4) var(--page-gutter) var(--spacing-6);
 				background: var(--color-bg);
-				border: 1px solid var(--color-border);
-				border-radius: var(--radius-lg);
+				border-bottom: 1px solid var(--color-border);
 				box-shadow: var(--shadow-lg);
-				max-height: 400px;
-				overflow-y: auto;
-				z-index: 1000;
 			}
 
-			:global(.site-search-results .emdash-live-search-loading),
-			:global(.site-search-results .emdash-live-search-no-results) {
-				padding: var(--spacing-4);
-				text-align: center;
-				color: var(--color-muted);
-				font-size: var(--font-size-sm);
+			.nav-links.open {
+				display: flex;
 			}
 
-			:global(.site-search-result) {
-				display: block;
-				padding: var(--spacing-3) var(--spacing-4);
-				text-decoration: none;
-				color: var(--color-text);
-				border-bottom: 1px solid var(--color-border-subtle);
-				transition: background var(--transition-fast);
+			.nav-drop {
+				width: 100%;
 			}
 
-			:global(.site-search-result):last-child {
-				border-bottom: none;
+			.nav-top {
+				width: 100%;
+				justify-content: space-between;
+				padding: var(--spacing-3);
 			}
 
-			:global(.site-search-result):hover,
-			:global(.site-search-result):focus,
-			:global(.site-search-result.focused) {
-				background: var(--color-surface);
-				outline: none;
-			}
-
-			:global(.site-search-result .emdash-live-search-result-title) {
-				display: block;
-				font-weight: 500;
-				font-size: var(--font-size-sm);
-			}
-
-			:global(.site-search-result .emdash-live-search-result-collection) {
-				display: block;
-				font-size: var(--font-size-xs);
-				color: var(--color-muted);
-				text-transform: uppercase;
-				letter-spacing: var(--tracking-wide);
-				margin-top: 2px;
-			}
-
-			:global(.site-search-result .emdash-live-search-result-snippet) {
-				display: block;
-				font-size: var(--font-size-sm);
-				color: var(--color-muted);
+			.nav-menu {
+				position: static;
+				display: none;
+				min-width: 0;
 				margin-top: var(--spacing-1);
-				line-height: var(--leading-snug);
+				opacity: 1;
+				visibility: visible;
+				transform: none;
+				box-shadow: none;
+				border: none;
+				border-left: 2px solid var(--color-border);
+				border-radius: 0;
 			}
 
-			:global(.site-search-result .emdash-live-search-result-snippet mark) {
-				font-weight: 600;
-				color: var(--color-text);
+			.nav-drop.open .nav-menu {
+				display: block;
 			}
+
+			.nav-contact {
+				margin-inline-start: 0;
+				margin-top: var(--spacing-2);
+				justify-content: center;
+			}
+		}
+
+		/* Header search was removed by design; the dedicated /search page remains. */
 
 			main {
 				min-height: calc(100vh - var(--nav-height) - 300px);
@@ -836,77 +977,21 @@ const isLoggedIn = !!Astro.locals.user;
 				height: 16px;
 			}
 
-			@media (max-width: 900px) {
-				.footer-grid {
-					grid-template-columns: 1fr;
-					gap: var(--spacing-6);
-				}
-
-				.footer-brand {
-					padding-right: 0;
-				}
-
-				.site-search {
-					display: none;
-				}
+		@media (max-width: 900px) {
+			.footer-grid {
+				grid-template-columns: 1fr;
+				gap: var(--spacing-6);
 			}
 
-			@media (max-width: 640px) {
-				.site-header {
-					position: relative;
-					border-bottom: none;
-				}
+			.footer-brand {
+				padding-right: 0;
+			}
+		}
 
-				.nav {
-					display: grid;
-					grid-template-columns: minmax(0, 1fr) auto;
-					align-items: center;
-					height: auto;
-					column-gap: var(--spacing-3);
-					row-gap: var(--spacing-2);
-					padding: var(--spacing-3) var(--spacing-4);
-				}
-
-				.site-title {
-					grid-column: 1;
-					grid-row: 1;
-					font-size: var(--font-size-base);
-					min-width: 0;
-				}
-
-				.nav-right {
-					grid-column: 1 / -1;
-					grid-row: 2;
-					display: grid;
-					row-gap: var(--spacing-2);
-					margin-inline-start: 0;
-				}
-
-				.nav-links {
-					grid-column: 1;
-					display: flex;
-					column-gap: var(--spacing-3);
-					row-gap: var(--spacing-1);
-					flex-wrap: wrap;
-					justify-content: flex-start;
-				}
-
-				.nav-cta {
-					grid-column: 1;
-					justify-self: start;
-				}
-
-				.nav-admin {
-					grid-column: 2;
-					grid-row: 1;
-					justify-self: end;
-					font-size: var(--font-size-xs);
-					white-space: nowrap;
-				}
-
-				.footer-grid {
-					grid-template-columns: 1fr;
-				}
+		@media (max-width: 640px) {
+			.footer-grid {
+				grid-template-columns: 1fr;
+			}
 
 				.footer-brand {
 					grid-column: span 1;
@@ -920,20 +1005,56 @@ const isLoggedIn = !!Astro.locals.user;
 			}
 		</style>
 
-		<script>
-			// ⌘K / Ctrl+K to focus search
-			document.addEventListener("keydown", (e) => {
-				if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-					e.preventDefault();
-					const searchInput = document.querySelector(
-						".site-search-input"
-					) as HTMLInputElement;
-					if (searchInput) {
-						searchInput.focus();
+	<script>
+		// Header navigation only: mobile toggle, dropdown toggles,
+		// dismiss on outside click / Escape.
+		(function () {
+			var header = document.querySelector(".site-header");
+			if (!header) return;
+			var toggle = header.querySelector(".nav-toggle");
+			var links = header.querySelector("#site-nav-links");
+			function closeDrops() {
+				header.querySelectorAll(".nav-drop.open").forEach(function (drop) {
+					drop.classList.remove("open");
+					var btn = drop.querySelector(".nav-top");
+					if (btn) btn.setAttribute("aria-expanded", "false");
+				});
+			}
+			if (toggle && links) {
+				toggle.addEventListener("click", function () {
+					var open = links.classList.toggle("open");
+					toggle.setAttribute("aria-expanded", String(open));
+					if (!open) closeDrops();
+				});
+			}
+			header.querySelectorAll(".nav-drop > .nav-top").forEach(function (btn) {
+				btn.addEventListener("click", function () {
+					var drop = btn.parentElement;
+					if (!drop) return;
+					var wasOpen = drop.classList.contains("open");
+					closeDrops();
+					if (!wasOpen) {
+						drop.classList.add("open");
+						btn.setAttribute("aria-expanded", "true");
 					}
+				});
+			});
+			document.addEventListener("click", function (e) {
+				if (!header.contains(e.target)) {
+					closeDrops();
+					if (links) links.classList.remove("open");
+					if (toggle) toggle.setAttribute("aria-expanded", "false");
 				}
 			});
-		</script>
+			document.addEventListener("keydown", function (e) {
+				if (e.key === "Escape") {
+					closeDrops();
+					if (links) links.classList.remove("open");
+					if (toggle) toggle.setAttribute("aria-expanded", "false");
+				}
+			});
+		})();
+	</script>
 		<EmDashBodyEnd page={pageCtx} />
 	</body>
 </html>
