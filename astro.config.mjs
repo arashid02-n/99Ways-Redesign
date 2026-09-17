@@ -35,6 +35,20 @@ export default defineConfig({
 		},
 		{
 			provider: fontProviders.google(),
+			name: "Space Grotesk",
+			cssVariable: "--font-hero",
+			weights: [500, 600, 700],
+			fallbacks: ["sans-serif"],
+		},
+		{
+			provider: fontProviders.google(),
+			name: "Fraunces",
+			cssVariable: "--font-section",
+			weights: [500, 600, 700],
+			fallbacks: ["Georgia", "serif"],
+		},
+		{
+			provider: fontProviders.google(),
 			name: "IBM Plex Mono",
 			cssVariable: "--font-display",
 			weights: [400, 500, 600, 700],

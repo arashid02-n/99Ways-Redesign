@@ -197,44 +197,47 @@ const foundCtas = resolveCta(null);
 
 <Base title={siteTitle} description={siteTagline}>
 	<main class="home">
-		<!-- 01 · Hero -->
-		<header class="hero">
-			<div class="hero-inner">
-				<div class="hero-copy">
-					<span class="eyebrow">{siteTagline}</span>
-					<h1 class="hero-title">{homeModel.hero.title}</h1>
-					<p class="hero-sub">{homeModel.hero.subtitle}</p>
-					<a class="btn btn--primary hero-cta" href={heroCta.href}>
-						{heroCta.label}
-					</a>
-				</div>
-				{
-					mascot?.url && (
-						<figure class="hero-art">
-							<div class="hero-art-grid">
-								<img
-									src={mascot.url}
-									width={mascot.width}
-									height={mascot.height}
-									alt=""
-									class="hero-mascot"
-									fetchpriority="high"
-								/>
-							</div>
-						</figure>
-					)
-				}
+	<!-- 01 · Hero -->
+	<header class="hero">
+		<div class="hero-inner">
+			<div class="hero-copy">
+				<span class="hero-eyebrow"><span class="hero-eyebrow-dot" aria-hidden="true"></span>{siteTagline}</span>
+				<h1 class="hero-title">Find and Pull Your Biggest Growth Levers with Experimentation</h1>
+				<p class="hero-sub">We run your CRO operation, from research and prioritization to implementation and analysis.</p>
+				<a class="hero-cta" href={heroCta.href}>
+					{heroCta.label}<span aria-hidden="true">→</span>
+				</a>
 			</div>
-		</header>
+			{
+				mascot?.url && (
+					<figure class="hero-visual">
+						<div class="hero-glow" aria-hidden="true"></div>
+						<div class="hero-pulse-ring" aria-hidden="true"></div>
+						<div class="hero-stage">
+							<img
+								src={mascot.url}
+								width={mascot.width}
+								height={mascot.height}
+								alt=""
+								class="hero-frog"
+								fetchpriority="high"
+							/>
+						</div>
+						<div class="hero-shadow" aria-hidden="true"></div>
+					</figure>
+				)
+			}
+		</div>
+	</header>
 
 		<!-- 02 · The system behind predictable growth -->
 		{
 			system.pillars.length > 0 && (
-				<section class="section system">
-					<div class="section-head">
-						<span class="eyebrow">01</span>
-						<h2 class="section-title">{system.title}</h2>
-					</div>
+			<section class="section system">
+				<div class="section-head">
+					<span class="eyebrow">01</span>
+					<h2 class="section-title system-title">How I Find CRO Breakthroughs Again and Again</h2>
+				</div>
 					<div class="system-grid">
 						{system.pillars.map((pillar, i) => (
 							<article class="pillar">
@@ -377,85 +380,379 @@ const foundCtas = resolveCta(null);
 	</main>
 </Base>
 
+<script>
+	// Hero frog interactivity:
+	// - ambient: the frog subtly leans toward the cursor anywhere over the hero;
+	// - hover: over the frog itself it lifts, tilts toward the pointer and
+	//   catches more light, then eases back to rest on leave.
+	(function () {
+		var hero = document.querySelector(".hero");
+		var visual = hero && hero.querySelector(".hero-visual");
+		if (!hero || !visual) return;
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+		var frog = visual.querySelector(".hero-frog");
+		if (!frog) return;
+		var leanT = { x: 0, y: 0 };
+		var leanC = { x: 0, y: 0 };
+		var hovT = { tx: 0, ty: 0, rx: 0, ry: 0, lift: 0, b: 1, s: 1 };
+		var hovC = { tx: 0, ty: 0, rx: 0, ry: 0, lift: 0, b: 1, s: 1 };
+		var raf = 0;
+		var heroActive = false;
+		function settled(a, b) {
+			return Math.abs(a - b) < 0.001;
+		}
+		function tick() {
+			leanC.x += (leanT.x - leanC.x) * 0.08;
+			leanC.y += (leanT.y - leanC.y) * 0.08;
+			if (settled(leanT.x, leanC.x)) leanC.x = leanT.x;
+			if (settled(leanT.y, leanC.y)) leanC.y = leanT.y;
+			frog.style.setProperty("--hero-fx", (leanC.x * 16).toFixed(1) + "px");
+			frog.style.setProperty("--hero-fy", (leanC.y * 12).toFixed(1) + "px");
+			frog.style.setProperty("--hero-rr", (leanC.x * 3).toFixed(2) + "deg");
+			var k = 0.12;
+			hovC.tx += (hovT.tx - hovC.tx) * k;
+			hovC.ty += (hovT.ty - hovC.ty) * k;
+			hovC.rx += (hovT.rx - hovC.rx) * k;
+			hovC.ry += (hovT.ry - hovC.ry) * k;
+			hovC.lift += (hovT.lift - hovC.lift) * k;
+			hovC.b += (hovT.b - hovC.b) * k;
+			hovC.s += (hovT.s - hovC.s) * k;
+			frog.style.setProperty("--hf-tx", hovC.tx.toFixed(1) + "px");
+			frog.style.setProperty("--hf-ty", hovC.ty.toFixed(1) + "px");
+			frog.style.setProperty("--hf-rx", hovC.rx.toFixed(2) + "deg");
+			frog.style.setProperty("--hf-ry", hovC.ry.toFixed(2) + "deg");
+			frog.style.setProperty("--hf-lift", hovC.lift.toFixed(3));
+			frog.style.setProperty("--hf-b", hovC.b.toFixed(3));
+			frog.style.setProperty("--hf-scale", hovC.s.toFixed(3));
+			var calm =
+				leanC.x === leanT.x &&
+				leanC.y === leanT.y &&
+				settled(hovT.tx, hovC.tx) &&
+				settled(hovT.ty, hovC.ty) &&
+				settled(hovT.rx, hovC.rx) &&
+				settled(hovT.ry, hovC.ry) &&
+				settled(hovT.lift, hovC.lift) &&
+				settled(hovT.b, hovC.b) &&
+				settled(hovT.s, hovC.s);
+			if (!calm) {
+				raf = requestAnimationFrame(tick);
+			} else {
+				raf = 0;
+			}
+		}
+		function kick() {
+			if (!raf) raf = requestAnimationFrame(tick);
+		}
+		hero.addEventListener("pointermove", function (e) {
+			var r = hero.getBoundingClientRect();
+			leanT.x = (e.clientX - r.left) / r.width - 0.5;
+			leanT.y = (e.clientY - r.top) / r.height - 0.5;
+			heroActive = true;
+			kick();
+		});
+		hero.addEventListener("pointerleave", function () {
+			leanT.x = 0;
+			leanT.y = 0;
+			heroActive = false;
+			kick();
+		});
+		visual.addEventListener("pointerenter", function () {
+			visual.classList.add("hovering");
+			hovT.lift = 1;
+			hovT.b = 1.06;
+			hovT.s = 1.02;
+			kick();
+		});
+		visual.addEventListener("pointermove", function (e) {
+			var r = frog.getBoundingClientRect();
+			var nx = (e.clientX - (r.left + r.width / 2)) / r.width;
+			var ny = (e.clientY - (r.top + r.height / 2)) / r.height;
+			nx = Math.max(-0.5, Math.min(0.5, nx));
+			ny = Math.max(-0.5, Math.min(0.5, ny));
+			hovT.tx = nx * 14;
+			hovT.ty = ny * 10;
+			hovT.rx = ny * -8;
+			hovT.ry = nx * 10;
+			kick();
+		});
+		visual.addEventListener("pointerleave", function () {
+			visual.classList.remove("hovering");
+			hovT.tx = 0;
+			hovT.ty = 0;
+			hovT.rx = 0;
+			hovT.ry = 0;
+			hovT.lift = 0;
+			hovT.b = 1;
+			hovT.s = 1;
+			kick();
+		});
+	})();
+</script>
+
 <style>
 	.home {
 		overflow: clip;
 	}
 
-	/* ---------- Hero ---------- */
+	/* ---------- Hero (standalone frog, CSS 3D + parallax) ---------- */
 	.hero {
-		border-bottom: 1px solid var(--color-border-subtle);
+		position: relative;
+		overflow: clip;
+		background:
+			radial-gradient(
+				52rem 30rem at 82% 28%,
+				color-mix(in srgb, var(--color-success) 12%, transparent),
+				transparent 65%
+			),
+			radial-gradient(
+				44rem 28rem at 10% 88%,
+				color-mix(in srgb, var(--color-brand) 10%, transparent),
+				transparent 60%
+			),
+			var(--color-bg);
 	}
 
 	.hero-inner {
+		position: relative;
 		display: grid;
 		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
 		align-items: center;
-		gap: var(--spacing-16);
+		gap: clamp(2rem, 5vw, 5rem);
 		max-width: var(--wide-width);
 		margin: 0 auto;
-		padding: clamp(5rem, 12vw, 9rem) var(--page-gutter)
-			clamp(4rem, 8vw, 7rem);
+		padding: clamp(5rem, 11vw, 9.5rem) var(--page-gutter)
+			clamp(4.5rem, 8vw, 7.5rem);
+		perspective: 1200px;
+	}
+
+	.hero-copy {
+		position: relative;
+		z-index: 2;
+	}
+
+	.hero-eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.625rem;
+		padding: 0.5rem 1rem;
+		border: 1px solid var(--color-border);
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+		font-family: var(--font-mono);
+		font-size: var(--font-size-kicker);
+		font-weight: 600;
+		line-height: 1.4;
+		letter-spacing: var(--tracking-eyebrow);
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.hero-eyebrow-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--color-success);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-success) 20%, transparent);
+		animation: hero-pulse 2.4s ease-in-out infinite;
+	}
+
+	@keyframes hero-pulse {
+		0%,
+		100% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.25);
+		}
 	}
 
 	.hero-title {
 		margin-top: var(--spacing-6);
-		font-size: var(--font-size-hero);
-		line-height: 1.04;
+		font-family: var(--font-hero);
+		font-size: clamp(2rem, 1.25rem + 3vw, 3.5rem);
+		font-weight: 600;
+		line-height: 1.06;
 		letter-spacing: -0.02em;
-		max-width: 15ch;
+		text-wrap: balance;
+		max-width: 16ch;
 	}
 
 	.hero-sub {
-		margin-top: var(--spacing-8);
-		font-size: var(--font-size-xl);
+		margin-top: var(--spacing-5);
+		font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
 		line-height: var(--leading-relaxed);
 		color: var(--color-text-secondary);
-		max-width: 46ch;
+		max-width: 44ch;
 	}
 
 	.hero-cta {
-		margin-top: var(--spacing-10);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-top: var(--spacing-6);
+		padding: 0.95rem 2rem;
+		border-radius: 2px;
+		background: var(--color-brand);
+		color: var(--color-bg);
+		font-family: var(--font-mono);
+		font-size: var(--font-size-sm);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		text-decoration: none;
+		box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--color-brand) 55%, transparent);
+		transition:
+			background var(--transition-base),
+			transform var(--transition-base),
+			box-shadow var(--transition-base);
 	}
 
-	.hero-art {
-		margin: 0;
+	.hero-cta:hover {
+		background: var(--color-success);
+		color: #fff;
+		transform: translateY(-2px);
+		box-shadow: 0 24px 48px -18px color-mix(in srgb, var(--color-success) 60%, transparent);
 	}
 
-	.hero-art-grid {
-		position: relative;
-		display: grid;
-		place-items: center;
-		aspect-ratio: 1;
-		max-width: 420px;
-		margin: 0 auto;
-		border: 1px solid var(--color-border);
-		background:
-			linear-gradient(var(--color-border-subtle) 1px, transparent 1px),
-			linear-gradient(90deg, var(--color-border-subtle) 1px, transparent 1px);
-		background-size: 28px 28px;
+	.hero-cta span {
+		transition: transform var(--transition-base);
 	}
 
-	.hero-art-grid::before,
-	.hero-art-grid::after {
-		content: "";
-		position: absolute;
-		inset: 0 50% 0 -1px;
-		width: 2px;
-		background: var(--color-border-subtle);
-	}
-	.hero-art-grid::after {
-		inset: 50% 0 -1px 0;
-		height: 2px;
-		width: auto;
+	.hero-cta:hover span {
+		transform: translateX(4px);
 	}
 
-	.hero-mascot {
+	.hero-visual {
 		position: relative;
 		z-index: 1;
-		width: min(72%, 340px);
+		margin: 0;
+		display: grid;
+		place-items: center;
+		width: 100%;
+		max-width: 440px;
+		justify-self: end;
+		perspective: 900px;
+	}
+
+	.hero-glow {
+		position: absolute;
+		width: 112%;
+		aspect-ratio: 1;
+		background: radial-gradient(
+			closest-side,
+			color-mix(in srgb, var(--color-success) 22%, transparent),
+			transparent 70%
+		);
+		filter: blur(30px);
+		transition: filter 0.5s ease;
+	}
+
+	.hero-visual.hovering .hero-glow {
+		filter: blur(30px) brightness(1.18);
+	}
+
+	.hero-pulse-ring {
+		position: absolute;
+		bottom: 5%;
+		width: 46%;
+		height: 30px;
+		border: 1px solid color-mix(in srgb, var(--color-success) 45%, transparent);
+		border-radius: 50%;
+		opacity: 0;
+		animation: hero-ring 6s ease-out infinite;
+	}
+
+	@keyframes hero-ring {
+		0% {
+			transform: scale(0.55);
+			opacity: 0;
+		}
+		18% {
+			opacity: 0.55;
+		}
+		60% {
+			transform: scale(1.18);
+			opacity: 0;
+		}
+		100% {
+			transform: scale(1.18);
+			opacity: 0;
+		}
+	}
+
+	.hero-stage {
+		animation:
+			hero-enter 1.1s cubic-bezier(0.22, 0.9, 0.28, 1) both,
+			hero-breathe 7s ease-in-out 1.1s infinite;
+	}
+
+	@keyframes hero-enter {
+		from {
+			opacity: 0;
+			transform: translateY(26px) scale(0.94);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	@keyframes hero-breathe {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-9px);
+		}
+	}
+
+	.hero-frog {
+		position: relative;
+		width: min(84%, 400px);
 		height: auto;
-		filter: drop-shadow(0 24px 48px rgba(41, 43, 42, 0.18));
+		translate: var(--hero-fx, 0px) var(--hero-fy, 0px);
+		rotate: var(--hero-rr, 0deg);
+		transform:
+			translate(var(--hf-tx, 0px), calc(var(--hf-ty, 0px) + var(--hf-lift, 0) * -10px))
+			rotateX(var(--hf-rx, 0deg)) rotateY(var(--hf-ry, 0deg))
+			scale(var(--hf-scale, 1));
+		filter: brightness(var(--hf-b, 1)) drop-shadow(0 34px 44px rgba(20, 60, 35, 0.28));
+	}
+
+	.hero-shadow {
+		position: absolute;
+		bottom: 2%;
+		width: 58%;
+		height: 26px;
+		background: radial-gradient(
+			closest-side,
+			color-mix(in srgb, var(--color-text) 32%, transparent),
+			transparent 72%
+		);
+		filter: blur(10px);
+		animation: hero-shadow 7s ease-in-out 1.1s infinite;
+	}
+
+	@keyframes hero-shadow {
+		0%,
+		100% {
+			transform: scaleX(1);
+			opacity: 0.9;
+		}
+		50% {
+			transform: scaleX(0.82);
+			opacity: 0.6;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-eyebrow-dot,
+		.hero-stage,
+		.hero-pulse-ring,
+		.hero-shadow {
+			animation: none;
+		}
 	}
 
 	/* ---------- Shared sections ---------- */
@@ -496,6 +793,84 @@ const foundCtas = resolveCta(null);
 	.section-link:hover {
 		color: var(--color-brand-hover);
 		border-color: var(--color-brand-hover);
+	}
+
+	/* ---------- System band (graphite + glow, palette only) ---------- */
+	.system {
+		--sys-ink: var(--color-bg);
+		--sys-soft: color-mix(in srgb, var(--color-bg) 74%, var(--color-text));
+		--sys-line: color-mix(in srgb, var(--color-bg) 16%, transparent);
+		--sys-card: color-mix(in srgb, var(--color-bg) 5%, transparent);
+		position: relative;
+		background:
+			radial-gradient(
+				48rem 26rem at 85% 10%,
+				color-mix(in srgb, var(--color-success) 14%, transparent),
+				transparent 62%
+			),
+			radial-gradient(
+				38rem 24rem at 6% 92%,
+				color-mix(in srgb, var(--color-brand) 12%, transparent),
+				transparent 60%
+			),
+			var(--color-text);
+	}
+
+	.system .eyebrow {
+		color: var(--sys-soft);
+	}
+
+	.system-title {
+		font-family: var(--font-section);
+		font-weight: 600;
+		font-size: clamp(2rem, 1.4rem + 3.2vw, 3.75rem);
+		line-height: 1.08;
+		letter-spacing: -0.01em;
+		text-wrap: balance;
+		color: var(--sys-ink);
+		max-width: 22ch;
+	}
+
+	.system .pillar-title {
+		color: var(--sys-ink);
+	}
+
+	.system .pillar-desc {
+		color: var(--sys-soft);
+	}
+
+	.system .pillar-items {
+		border-top-color: var(--sys-line);
+	}
+
+	.system .pillar-item {
+		color: var(--sys-soft);
+		border-bottom-color: var(--sys-line);
+	}
+
+	.system .pillar-item::before {
+		color: var(--color-success);
+	}
+
+	.system .pillar-frame {
+		border-color: var(--sys-line);
+		background: var(--sys-card);
+	}
+
+	.system .pillar-index {
+		color: var(--sys-ink);
+		background: var(--sys-card);
+		border-color: var(--sys-line);
+	}
+
+	.system .pillar-cta {
+		color: var(--sys-ink);
+		border-bottom-color: var(--color-success);
+	}
+
+	.system .pillar-cta:hover {
+		color: var(--sys-ink);
+		border-bottom-color: var(--sys-ink);
 	}
 
 	/* ---------- System / pillars ---------- */
@@ -697,12 +1072,12 @@ const foundCtas = resolveCta(null);
 			padding-top: clamp(4rem, 12vw, 6rem);
 		}
 
-		.hero-art {
+		.hero-visual {
 			order: 2;
 		}
 
-		.hero-art-grid {
-			max-width: 320px;
+		.hero-frog {
+			width: min(78%, 320px);
 		}
 
 		.hero-title {
@@ -739,6 +1114,10 @@ const foundCtas = resolveCta(null);
 
 		.hero-sub {
 			font-size: var(--font-size-lg);
+		}
+
+		.hero-frog {
+			width: min(86%, 280px);
 		}
 
 		.section-head {
